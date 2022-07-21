@@ -1,5 +1,6 @@
 package be.salushealthcare.salus.person;
 
+import be.salushealthcare.salus.address.Address;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,4 +17,6 @@ public class UpdatePersonInput {
     private final LocalDate birthDate;
     private final String telephoneNumber;
     private final String title;
+    private final Address residence;
+    private final Address domicile;
 }

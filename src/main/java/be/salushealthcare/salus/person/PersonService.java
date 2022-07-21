@@ -21,16 +21,18 @@ public class PersonService {
     @Transactional
     public Person create(CreatePersonInput input) {
         return repository.saveAndFlush(Person
-            .builder()
-            .firstName(input.getFirstName())
-            .lastName(input.getLastName())
-            .birthDate(input.getBirthDate())
-            .telephoneNumber(input.getTelephoneNumber())
-            .title(input.getTitle())
-            .teams(List.of())
-            .build());
+                        .builder()
+                        .firstName(input.getFirstName())
+                        .lastName(input.getLastName())
+                        .birthDate(input.getBirthDate())
+                        .telephoneNumber(input.getTelephoneNumber())
+                        .residence(input.getResidence())
+                        .domicile(input.getDomicile())
+                        .teams(List.of())
+                        .build());
     }
 
+    // TODO undestand if it is necessary a check to update only non-null fields
     @Transactional
     public Person update(Long personId, UpdatePersonInput input) {
         Person person = getById(personId);
@@ -38,6 +40,8 @@ public class PersonService {
         person.setLastName(input.getLastName());
         person.setBirthDate(input.getBirthDate());
         person.setTelephoneNumber(input.getTelephoneNumber());
+        person.setResidence(input.getResidence());
+        person.setDomicile(input.getDomicile());
         return person;
     }
 

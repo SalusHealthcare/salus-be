@@ -1,5 +1,6 @@
 package be.salushealthcare.salus.person;
 
+import be.salushealthcare.salus.address.Address;
 import be.salushealthcare.salus.team.TeamMember;
 import be.salushealthcare.salus.user.User;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.time.LocalDate;
@@ -24,7 +26,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "taxCode")
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,11 +44,19 @@ public class Person {
     @Setter
     private String telephoneNumber;
 
+    // TODO propagate taxCode change to all the project
     @Setter
-    private String title;
+    private String taxCode;
+
+    @Setter
+    @OneToOne(cascade = CascadeType.ALL)
+    private Address domicile;
+
+    @Setter
+    @OneToOne(cascade = CascadeType.ALL)
+    private Address residence;
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
-    @EqualsAndHashCode.Exclude
     private List<TeamMember> teams;
 
     @OneToOne(mappedBy = "person")
