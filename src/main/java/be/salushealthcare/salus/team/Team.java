@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.List;
 
+// TODO general refactor to accomplish the purpose of the project
 @Entity
 @Getter
 @Builder

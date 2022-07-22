@@ -39,6 +39,7 @@ public class User {
     @EqualsAndHashCode.Include
     private String password;
 
+    // TODO aggiungere enum per i roles
     @ElementCollection
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "person_id"))
     @Column(name = "name")
