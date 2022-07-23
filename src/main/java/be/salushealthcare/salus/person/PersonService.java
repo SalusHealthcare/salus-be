@@ -18,7 +18,7 @@ public class PersonService {
         return repository.findAll(pageRequest).getContent();
     }
 
-    @Transactional
+    /*@Transactional
     public Person create(CreatePersonInput input) {
         return repository.saveAndFlush(Person
                         .builder()
@@ -30,9 +30,8 @@ public class PersonService {
                         .domicile(input.getDomicile())
                         .teams(List.of())
                         .build());
-    }
+    }*/
 
-    // TODO undestand if it is necessary a check to update only non-null fields
     @Transactional
     public Person update(Long personId, UpdatePersonInput input) {
         Person person = getById(personId);

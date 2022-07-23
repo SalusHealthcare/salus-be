@@ -33,7 +33,7 @@ public class Document {
 
     private MedicalSpeciality category;
 
-    private DocumentType type;
+    private DocumentType documentType;
 
     @ManyToOne
     private Medic editor;

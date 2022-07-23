@@ -4,6 +4,7 @@ import be.salushealthcare.salus.person.CreatePersonInput;
 import be.salushealthcare.salus.person.Person;
 import be.salushealthcare.salus.person.PersonService;
 import be.salushealthcare.salus.person.UpdatePersonInput;
+import be.salushealthcare.salus.person.patient.PatientService;
 import be.salushealthcare.salus.security.BadCredentialsException;
 import be.salushealthcare.salus.team.Team;
 import be.salushealthcare.salus.team.TeamMemberService;
@@ -26,12 +27,18 @@ import org.springframework.stereotype.Component;
 public class MutationResolver implements GraphQLMutationResolver {
     private final UserService userService;
     private final PersonService personService;
+    private final PatientService patientService;
     private final TeamService teamService;
     private final TeamMemberService teamMemberService;
     private final AuthenticationProvider authenticationProvider;
 
-    public User createUser(CreateUserInput userInfo, CreatePersonInput personInput) {
+    /*public User createUser(CreateUserInput userInfo, CreatePersonInput personInput) {
         Person person = personService.create(personInput);
+        return userService.createUser(person, userInfo);
+    }*/
+
+    public User createUser(CreateUserInput userInfo, CreatePersonInput personInput) {
+        Person person = patientService.create(personInput);
         return userService.createUser(person, userInfo);
     }
 

@@ -24,9 +24,7 @@ type Mutation {
     unpromotePerson(personId: ID!): Person
 }
 
-# TYPES
-
-type Person {
+interface Person {
     id: ID
     firstName: String
     lastName: String
@@ -37,8 +35,22 @@ type Person {
     birthDate: Date
     telephoneNumber: String
     roles: [String]
-    teams(withUnapproved: Boolean): [TeamMember]
-    teamCount: Int
+}
+
+# TYPES
+
+type Patient implements Person{
+    id: ID
+    firstName: String
+    lastName: String
+    email: String
+    taxCode: String
+    residence: Address
+    domicile: Address
+    birthDate: Date
+    telephoneNumber: String
+    roles: [String]
+    medicalRecord: [Document]
 }
 
 type User {
@@ -69,6 +81,13 @@ type Team {
 type TeamMember {
     person: Person
     approved: Boolean
+}
+
+type Document {
+    id: ID
+    description: String
+    category: MedicalSpeciality
+    documentType: DocumentType
 }
 
 type Duration {
