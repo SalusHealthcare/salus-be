@@ -98,6 +98,31 @@ enum Order {
     DESC
 }
 
+enum DocumentType {
+    PRESCRIPTION
+    DIAGNOSTIC
+    REPORT
+    LABORATORY_ANALYSIS
+}
+
+enum MedicalSpeciality {
+    GENERAL_PRACTICE
+    RADIOLOGY
+    OPHTHALMOLOGY
+    SPORTS_MEDICINE_AND_REHABILITATION
+    ONCOLOGY
+    DERMATOLOGY
+    EMERGENCY_MEDICINE
+}
+
+enum Priority {
+    WHITE
+    GREEN
+    YELLOW
+    RED
+}
+
+
 # INPUTS
 
 input CreateUserInput {
