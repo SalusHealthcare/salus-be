@@ -9,7 +9,9 @@ type Query {
 }
 
 type Mutation {
-    createUser(userInfo: CreateUserInput!, personInfo: CreatePersonInput!): User
+    createPatientUser(userInfo: CreateUserInput!, personInfo: CreatePersonInput!): User
+    createStaffUser(userInfo: CreateUserInput!, personInfo: CreatePersonInput!): User
+    createMedicUser(userInfo: CreateUserInput!, personInfo: CreatePersonInput!): User
     updatePassword(input: UpdatePasswordInput!): User
     updatePerson(input: UpdatePersonInput!): Person
     createTeam(name: String!): Team
@@ -24,6 +26,8 @@ type Mutation {
     unpromotePerson(personId: ID!): Person
 }
 
+# INTERFACES
+
 interface Person {
     id: ID
     firstName: String
@@ -35,6 +39,12 @@ interface Person {
     birthDate: Date
     telephoneNumber: String
     roles: [String]
+}
+
+interface TimeSlot {
+    id: ID
+    startDateTime: Date
+    durationInHours: Int
 }
 
 # TYPES
@@ -51,6 +61,59 @@ type Patient implements Person{
     telephoneNumber: String
     roles: [String]
     medicalRecord: [Document]
+}
+
+type Staff implements Person {
+    id: ID
+    firstName: String
+    lastName: String
+    email: String
+    taxCode: String
+    residence: Address
+    domicile: Address
+    birthDate: Date
+    telephoneNumber: String
+    roles: [String]
+    teams: [TeamMember]
+}
+
+type Medic implements Person {
+    id: ID
+    firstName: String
+    lastName: String
+    email: String
+    taxCode: String
+    residence: Address
+    domicile: Address
+    birthDate: Date
+    telephoneNumber: String
+    roles: [String]
+    teams: [TeamMember]
+    reservationSlots: [ReservationSlot]
+}
+
+type ShiftSlot implements TimeSlot {
+    id: ID
+    startDateTime: Date
+    durationInHours: Int
+}
+
+type ReservationSlot implements TimeSlot {
+    id: ID
+    startDateTime: Date
+    durationInHours: Int
+    booked: Boolean
+    reservation: Reservation
+    medic: Medic
+}
+
+type Reservation {
+    id: ID
+    description: String
+    bookedAt: Date
+    priority: Priority
+    patient: Patient
+    reservationSlot: ReservationSlot
 }
 
 type User {

@@ -1,14 +1,9 @@
-package be.salushealthcare.salus.person.patient;
+package be.salushealthcare.salus.person.staff;
 
 import be.salushealthcare.salus.person.CreatePersonInput;
-import be.salushealthcare.salus.person.Person;
-import be.salushealthcare.salus.person.PersonNotFoundException;
-import be.salushealthcare.salus.person.PersonRepository;
-import be.salushealthcare.salus.person.PersonSort;
-import be.salushealthcare.salus.person.UpdatePersonInput;
+import be.salushealthcare.salus.person.patient.Patient;
+import be.salushealthcare.salus.person.patient.PatientRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,12 +11,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PatientService {
-    private final PatientRepository repository;
+public class MedicService {
+    private final MedicRepository repository;
 
     @Transactional
-    public Patient create(CreatePersonInput input) {
-        return repository.saveAndFlush(Patient
+    public Medic create(CreatePersonInput input) {
+        return repository.saveAndFlush(Medic
                 .builder()
                 .firstName(input.getFirstName())
                 .lastName(input.getLastName())
@@ -29,7 +24,9 @@ public class PatientService {
                 .telephoneNumber(input.getTelephoneNumber())
                 .residence(input.getResidence())
                 .domicile(input.getDomicile())
-                        .medicalRecord(List.of())
+                .teams(List.of())
+                .shiftSlots(List.of())
+                .reservationSlots(List.of())
                 .build());
     }
 }

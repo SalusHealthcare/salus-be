@@ -1,4 +1,4 @@
-package be.salushealthcare.salus.person.patient;
+package be.salushealthcare.salus.person.staff;
 
 import be.salushealthcare.salus.person.Person;
 import be.salushealthcare.salus.user.UserService;
@@ -10,14 +10,14 @@ import java.util.Collection;
 
 @Component
 @RequiredArgsConstructor
-public class PatientResolver implements GraphQLResolver<Patient> {
+public class MedicResolver implements GraphQLResolver<Medic> {
     private final UserService userService;
 
-    public String getEmail(Patient person) {
+    public String getEmail(Medic person) {
         return userService.isAuthenticated() && person.getUser() != null ? person.getUser().getEmail() : null;
     }
 
-    public Collection<String> getRoles(Patient person) {
+    public Collection<String> getRoles(Medic person) {
         return person.getUser().getRoles();
     }
 }

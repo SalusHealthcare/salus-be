@@ -1,19 +1,19 @@
 package be.salushealthcare.salus.reservation;
 
 import be.salushealthcare.salus.person.patient.Patient;
-import be.salushealthcare.salus.timeslot.ReservationSlot;
+import be.salushealthcare.salus.timeslot.reservationslot.ReservationSlot;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -28,8 +28,9 @@ public class Reservation {
     private Long id;
 
     private String description;
-    // TODO convert it to LocalDateTime
-    private String bookedAt;
+
+    private LocalDate bookedAt;
+
     private Priority priority;
 
     @OneToOne

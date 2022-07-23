@@ -2,6 +2,9 @@ package be.salushealthcare.salus.user;
 
 import be.salushealthcare.salus.person.Person;
 import be.salushealthcare.salus.person.PersonService;
+import be.salushealthcare.salus.person.patient.Patient;
+import be.salushealthcare.salus.person.staff.Medic;
+import be.salushealthcare.salus.person.staff.Staff;
 import be.salushealthcare.salus.security.BadCredentialsException;
 import be.salushealthcare.salus.security.BadTokenException;
 import be.salushealthcare.salus.security.JWTUserDetails;
@@ -39,6 +42,8 @@ import static java.util.function.Predicate.not;
 public class UserService implements UserDetailsService {
     private static final String ADMIN_AUTHORITY = "ADMIN";
     private static final String USER_AUTHORITY = "USER";
+    private static final String STAFF_AUTHORITY = "STAFF";
+    private static final String MEDIC_AUTHORITY = "MEDIC";
     private final UserRepository repository;
     private final PersonService personService;
     private final SecurityProperties properties;
@@ -76,12 +81,18 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public User createUser(Person person, CreateUserInput input) {
+        Set<String> authorities;
+        if (person instanceof Patient) {
+            authorities = Set.of(USER_AUTHORITY);
+        } else {
+            authorities = person instanceof Staff ? Set.of(STAFF_AUTHORITY) : Set.of(STAFF_AUTHORITY, MEDIC_AUTHORITY);
+        }
         if (!exists(input)) {
             return repository.saveAndFlush(User
                 .builder()
                 .email(input.getEmail())
                 .password(passwordEncoder.encode(input.getPassword()))
-                .roles(Set.of(USER_AUTHORITY))
+                .roles(authorities)
                 .personId(person.getId())
                 .person(person)
                 .build());

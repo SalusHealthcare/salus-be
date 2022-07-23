@@ -4,7 +4,12 @@ import be.salushealthcare.salus.person.CreatePersonInput;
 import be.salushealthcare.salus.person.Person;
 import be.salushealthcare.salus.person.PersonService;
 import be.salushealthcare.salus.person.UpdatePersonInput;
+import be.salushealthcare.salus.person.patient.Patient;
 import be.salushealthcare.salus.person.patient.PatientService;
+import be.salushealthcare.salus.person.staff.Medic;
+import be.salushealthcare.salus.person.staff.MedicService;
+import be.salushealthcare.salus.person.staff.Staff;
+import be.salushealthcare.salus.person.staff.StaffService;
 import be.salushealthcare.salus.security.BadCredentialsException;
 import be.salushealthcare.salus.team.Team;
 import be.salushealthcare.salus.team.TeamMemberService;
@@ -28,17 +33,26 @@ public class MutationResolver implements GraphQLMutationResolver {
     private final UserService userService;
     private final PersonService personService;
     private final PatientService patientService;
+    private final StaffService staffService;
+    private final MedicService medicService;
     private final TeamService teamService;
     private final TeamMemberService teamMemberService;
     private final AuthenticationProvider authenticationProvider;
 
-    /*public User createUser(CreateUserInput userInfo, CreatePersonInput personInput) {
-        Person person = personService.create(personInput);
+    public User createPatientUser(CreateUserInput userInfo, CreatePersonInput personInput) {
+        Patient person = patientService.create(personInput);
         return userService.createUser(person, userInfo);
-    }*/
+    }
 
-    public User createUser(CreateUserInput userInfo, CreatePersonInput personInput) {
-        Person person = patientService.create(personInput);
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public User createStaffUser(CreateUserInput userInfo, CreatePersonInput personInput) {
+        Staff person = staffService.create(personInput);
+        return userService.createUser(person, userInfo);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public User createMedicUser(CreateUserInput userInfo, CreatePersonInput personInput) {
+        Medic person = medicService.create(personInput);
         return userService.createUser(person, userInfo);
     }
 

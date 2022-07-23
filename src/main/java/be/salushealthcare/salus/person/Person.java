@@ -1,10 +1,8 @@
 package be.salushealthcare.salus.person;
 
 import be.salushealthcare.salus.address.Address;
-import be.salushealthcare.salus.team.TeamMember;
 import be.salushealthcare.salus.user.User;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,12 +14,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Getter
