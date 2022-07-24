@@ -1,0 +1,11 @@
+{
+  "groups": [
+    {
+      "name": "salus.security",
+      "type": "be.salushealthcare.salus.security.SecurityProperties",
+      "sourceType": "be.salushealthcare.salus.security.SecurityProperties"
+    }
+  ],
+  "properties": [],
+  "hints": []
+}
