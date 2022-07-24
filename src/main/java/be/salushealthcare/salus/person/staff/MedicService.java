@@ -1,8 +1,6 @@
 package be.salushealthcare.salus.person.staff;
 
 import be.salushealthcare.salus.person.CreatePersonInput;
-import be.salushealthcare.salus.person.patient.Patient;
-import be.salushealthcare.salus.person.patient.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

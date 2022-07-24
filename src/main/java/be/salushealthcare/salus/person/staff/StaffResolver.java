@@ -1,6 +1,5 @@
 package be.salushealthcare.salus.person.staff;
 
-import be.salushealthcare.salus.person.Person;
 import be.salushealthcare.salus.user.UserService;
 import graphql.kickstart.tools.GraphQLResolver;
 import lombok.RequiredArgsConstructor;
