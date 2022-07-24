@@ -25,7 +25,6 @@ public class Staff extends Person {
     @OneToMany(cascade = CascadeType.ALL)
     private List<TeamMember> teams;
 
-    @Setter
     @OneToMany(cascade = CascadeType.ALL)
     private List<ShiftSlot> shiftSlots;
 }

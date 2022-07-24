@@ -14,6 +14,8 @@ import be.salushealthcare.salus.security.BadCredentialsException;
 import be.salushealthcare.salus.team.Team;
 import be.salushealthcare.salus.team.TeamMemberService;
 import be.salushealthcare.salus.team.TeamService;
+import be.salushealthcare.salus.timeslot.shiftslot.ShiftSlot;
+import be.salushealthcare.salus.timeslot.shiftslot.ShiftSlotInput;
 import be.salushealthcare.salus.user.CreateUserInput;
 import be.salushealthcare.salus.user.UpdatePasswordInput;
 import be.salushealthcare.salus.user.User;
@@ -26,6 +28,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -124,5 +128,10 @@ public class MutationResolver implements GraphQLMutationResolver {
     @PreAuthorize("hasAuthority('ADMIN')")
     public Person unpromotePerson(long personId) {
         return userService.unpromotePerson(personId);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Staff addShifts(long personId, List<ShiftSlotInput> shifts) {
+        return staffService.addShifts(personId, shifts);
     }
 }

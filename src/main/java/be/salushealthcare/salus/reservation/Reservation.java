@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -29,7 +30,7 @@ public class Reservation {
 
     private String description;
 
-    private LocalDate bookedAt;
+    private LocalDateTime bookedAt;
 
     private Priority priority;
 

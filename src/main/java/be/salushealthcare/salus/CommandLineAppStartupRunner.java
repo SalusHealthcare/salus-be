@@ -28,8 +28,9 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
         Long personId = 0L;
 
         if (createAdminAtLaunch &&
-                (!userRepository.existsByEmail(email) ||
-                        userRepository.findAll().stream().anyMatch(u -> u.getRoles().contains("ADMIN")))
+                !userRepository.existsByEmail(email)
+                        // TODO il controllo sotto non funziona fixarlo e capire il problema
+                        // || userRepository.findAll().stream().anyMatch(u -> u.getRoles().contains("ADMIN")))
         ) {
             User admin = User.builder()
                     .email(email)

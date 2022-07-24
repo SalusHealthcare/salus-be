@@ -1,0 +1,15 @@
+1. L'admin deve essere capace di assegnare shiftSlots a staff
+
+2. Lo staff deve essere capace di consultare i SUOI shiftSlots
+
+3. Il medico deve essere capace di creare i propri reservationSlots e di consultarli
+
+4. Il patient deve essere capace di consultare i suoi documents filtrando per tipo e data
+
+5. Il patient deve essere capace di creare una Reservation e prenotare un reservationSlot di un Medic
+
+6. Il medic deve essere capace di caricare documenti nel medicalRecord di un Patient
+
+7. Lo staff deve essere capace di caricare solo alcuni tipi di documenti nel medicalRecord di un Patient
+
+8. AGGIUSTARE FUNZIUONAMENTO DEL TEAM

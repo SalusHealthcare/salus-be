@@ -1,11 +1,15 @@
 package be.salushealthcare.salus.person.staff;
 
 import be.salushealthcare.salus.person.CreatePersonInput;
+import be.salushealthcare.salus.timeslot.shiftslot.ShiftSlot;
+import be.salushealthcare.salus.timeslot.shiftslot.ShiftSlotInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,5 +29,18 @@ public class StaffService {
                 .teams(List.of())
                 .shiftSlots(List.of())
                 .build());
+    }
+
+    @Transactional
+    public Staff addShifts(long personId, List<ShiftSlotInput> shifts) {
+        Staff staff = repository.getOne(personId);
+        List<ShiftSlot> shiftSlots = shifts.stream()
+                .map(s -> ShiftSlot.builder()
+                        .startDateTime(s.getStartDateTime())
+                        .durationInHours(s.getDurationInHours())
+                        .build())
+                .collect(Collectors.toList());
+        staff.getShiftSlots().addAll(shiftSlots);
+        return staff;
     }
 }

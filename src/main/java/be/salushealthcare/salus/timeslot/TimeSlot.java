@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -25,7 +26,7 @@ public abstract class TimeSlot {
     private Long id;
 
     @Setter
-    private LocalDate startDateTime;
+    private LocalDateTime startDateTime;
 
     @Setter
     private Integer durationInHours;
