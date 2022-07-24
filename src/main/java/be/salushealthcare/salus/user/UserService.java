@@ -3,7 +3,6 @@ package be.salushealthcare.salus.user;
 import be.salushealthcare.salus.person.Person;
 import be.salushealthcare.salus.person.PersonService;
 import be.salushealthcare.salus.person.patient.Patient;
-import be.salushealthcare.salus.person.staff.Medic;
 import be.salushealthcare.salus.person.staff.Staff;
 import be.salushealthcare.salus.security.BadCredentialsException;
 import be.salushealthcare.salus.security.BadTokenException;

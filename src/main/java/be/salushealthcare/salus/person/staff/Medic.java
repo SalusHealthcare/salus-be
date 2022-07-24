@@ -2,6 +2,7 @@ package be.salushealthcare.salus.person.staff;
 
 import be.salushealthcare.salus.timeslot.reservationslot.ReservationSlot;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +18,7 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-//@Table(name = "staff")
+@EqualsAndHashCode(callSuper = true)
 public class Medic extends Staff {
     @Setter
     @OneToMany(cascade = CascadeType.ALL)

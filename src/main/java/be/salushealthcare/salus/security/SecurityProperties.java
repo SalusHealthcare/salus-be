@@ -28,4 +28,6 @@ public class SecurityProperties {
      * Duration after which a token will expire
      */
     private final Duration tokenExpiration = Duration.ofHours(4);
+
+    private final boolean createAdminAtLaunch;
 }

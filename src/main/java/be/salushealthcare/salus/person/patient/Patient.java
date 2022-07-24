@@ -3,7 +3,7 @@ package be.salushealthcare.salus.person.patient;
 import be.salushealthcare.salus.document.Document;
 import be.salushealthcare.salus.person.Person;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,10 +11,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import java.util.List;
 
 @Entity
@@ -22,8 +19,7 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-// TODO capire se è meglio cambiare la strategy perché forse così non posso avere due account uno per staff e uno per il paziente nel caso la stessa persona abbia bisogno di entrambi
-//@Table(name = "patient")
+@EqualsAndHashCode(callSuper = true)
 public class Patient extends Person {
     @Setter
     @OneToMany(cascade = CascadeType.ALL)
