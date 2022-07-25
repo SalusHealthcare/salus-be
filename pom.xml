@@ -108,7 +108,7 @@
         <artifactId>heroku-maven-plugin</artifactId>
         <version>3.0.3</version>
       </plugin>
-			<plugin>
+			<!-- <plugin>
 				<groupId>com.google.cloud.tools</groupId>
 				<artifactId>jib-maven-plugin</artifactId>
 				<version>1.8.0</version>
@@ -126,7 +126,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin> -->
 		</plugins>
 	</build>
 
