@@ -14,7 +14,6 @@ import be.salushealthcare.salus.security.BadCredentialsException;
 import be.salushealthcare.salus.team.Team;
 import be.salushealthcare.salus.team.TeamMemberService;
 import be.salushealthcare.salus.team.TeamService;
-import be.salushealthcare.salus.timeslot.shiftslot.ShiftSlot;
 import be.salushealthcare.salus.timeslot.shiftslot.ShiftSlotInput;
 import be.salushealthcare.salus.user.CreateUserInput;
 import be.salushealthcare.salus.user.UpdatePasswordInput;
