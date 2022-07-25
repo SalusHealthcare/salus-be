@@ -9,7 +9,9 @@ type Query {
 }
 
 type Mutation {
-    createUser(userInfo: CreateUserInput!, personInfo: CreatePersonInput!): User
+    createPatientUser(userInfo: CreateUserInput!, personInfo: CreatePersonInput!): User
+    createStaffUser(userInfo: CreateUserInput!, personInfo: CreatePersonInput!): User
+    createMedicUser(userInfo: CreateUserInput!, personInfo: CreatePersonInput!): User
     updatePassword(input: UpdatePasswordInput!): User
     updatePerson(input: UpdatePersonInput!): Person
     createTeam(name: String!): Team
@@ -22,9 +24,13 @@ type Mutation {
     replaceTeamLeader(teamId: ID!, personId: ID!): Team
     promotePerson(personId: ID!): Person
     unpromotePerson(personId: ID!): Person
+
+    addShifts(personId: ID!, shifts: [ShiftSlotInput]): Worker
 }
 
-type Person {
+# INTERFACES
+
+interface Person {
     id: ID
     firstName: String
     lastName: String
@@ -35,8 +41,87 @@ type Person {
     birthDate: Date
     telephoneNumber: String
     roles: [String]
-    teams(withUnapproved: Boolean): [TeamMember]
-    teamCount: Int
+}
+
+interface TimeSlot {
+    id: ID
+    startDateTime: DateTime
+    durationInHours: Int
+}
+
+# UNIONS
+
+union Worker = Staff | Medic
+
+# TYPES
+
+type Patient implements Person{
+    id: ID
+    firstName: String
+    lastName: String
+    email: String
+    taxCode: String
+    residence: Address
+    domicile: Address
+    birthDate: Date
+    telephoneNumber: String
+    roles: [String]
+    medicalRecord: [Document]
+}
+
+type Staff implements Person {
+    id: ID
+    firstName: String
+    lastName: String
+    email: String
+    taxCode: String
+    residence: Address
+    domicile: Address
+    birthDate: Date
+    telephoneNumber: String
+    roles: [String]
+    teams: [TeamMember]
+    shiftSlots: [ShiftSlot]
+}
+
+type Medic implements Person {
+    id: ID
+    firstName: String
+    lastName: String
+    email: String
+    taxCode: String
+    residence: Address
+    domicile: Address
+    birthDate: Date
+    telephoneNumber: String
+    roles: [String]
+    teams: [TeamMember]
+    shiftSlots: [ShiftSlot]
+    reservationSlots: [ReservationSlot]
+}
+
+type ShiftSlot implements TimeSlot {
+    id: ID
+    startDateTime: DateTime
+    durationInHours: Int
+}
+
+type ReservationSlot implements TimeSlot {
+    id: ID
+    startDateTime: DateTime
+    durationInHours: Int
+    booked: Boolean
+    reservation: Reservation
+    medic: Medic
+}
+
+type Reservation {
+    id: ID
+    description: String
+    bookedAt: DateTime
+    priority: Priority
+    patient: Patient
+    reservationSlot: ReservationSlot
 }
 
 type User {
@@ -69,6 +154,13 @@ type TeamMember {
     approved: Boolean
 }
 
+type Document {
+    id: ID
+    description: String
+    category: MedicalSpeciality
+    documentType: DocumentType
+}
+
 type Duration {
     toHours: Int
     toMinutes: Int
@@ -79,6 +171,13 @@ type Date {
     formatString(format: String!): String
     iso: String
 }
+
+type DateTime {
+    formatString(format: String!): String
+    iso: String
+}
+
+# ENUMS
 
 enum PersonSortField {
     LAST_NAME
@@ -93,6 +192,32 @@ enum Order {
     ASC
     DESC
 }
+
+enum DocumentType {
+    PRESCRIPTION
+    DIAGNOSTIC
+    REPORT
+    LABORATORY_ANALYSIS
+}
+
+enum MedicalSpeciality {
+    GENERAL_PRACTICE
+    RADIOLOGY
+    OPHTHALMOLOGY
+    SPORTS_MEDICINE_AND_REHABILITATION
+    ONCOLOGY
+    DERMATOLOGY
+    EMERGENCY_MEDICINE
+}
+
+enum Priority {
+    WHITE
+    GREEN
+    YELLOW
+    RED
+}
+
+# INPUTS
 
 input CreateUserInput {
     email: String!
@@ -143,4 +268,7 @@ input UpdatePasswordInput {
     newPassword: String!
 }
 
-scalar Upload
+input ShiftSlotInput {
+    startDateTime: String
+    durationInHours: Int
+}
