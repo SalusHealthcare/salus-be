@@ -13,8 +13,6 @@ s
 Csrc/main/java/be/salushealthcare/salus/security/SecurityConfig.java,a/e/ae06b6e6ab908a7ca7992a060ca7d9204a0522a7
 g
 7src/main/java/be/salushealthcare/salus/StreamUtils.java,7/1/71bdf73134ef6b40c837cdc3b20ae84f1eeeb0a1
-i
-9src/main/java/be/salushealthcare/salus/QueryResolver.java,1/9/1931afb42a3fa5097bac1dddacaf2e65817fcbb8
 7
 pom.xml,4/4/442292b8a7efeabbe4cc176709b833b1792140ec
 t

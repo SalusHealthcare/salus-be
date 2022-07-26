@@ -6,6 +6,10 @@ type Query {
     teamCount: Int
     team(teamId: ID!): Team
     currentUser: User
+
+    medics: [Medic]
+    reservationSlots(medidId: ID, bookable: Boolean): [ReservationSlot]
+    allReservationSlots(bookable: Boolean): [ReservationSlot]
 }
 
 type Mutation {
@@ -25,7 +29,9 @@ type Mutation {
     promotePerson(personId: ID!): Person
     unpromotePerson(personId: ID!): Person
 
-    addShifts(personId: ID!, shifts: [ShiftSlotInput]): Worker
+    addShifts(personId: ID!, shifts: [TimeSlotInput]): Worker
+    addReservationSlot(reservationSlots: [TimeSlotInput]): Medic
+    reserve(reservation: ReservationInput): Patient
 }
 
 # INTERFACES
@@ -268,7 +274,13 @@ input UpdatePasswordInput {
     newPassword: String!
 }
 
-input ShiftSlotInput {
+input TimeSlotInput {
     startDateTime: String
     durationInHours: Int
+}
+
+input ReservationInput {
+    reservationSlotId: ID!
+    description: String
+    priority: Priority
 }

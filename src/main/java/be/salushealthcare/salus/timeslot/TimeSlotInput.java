@@ -1,13 +1,11 @@
-package be.salushealthcare.salus.timeslot.shiftslot;
+package be.salushealthcare.salus.timeslot;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-@AllArgsConstructor
-public class ShiftSlotInput {
+public class TimeSlotInput {
     private LocalDateTime startDateTime;
     private Integer durationInHours;
 }

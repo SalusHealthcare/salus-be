@@ -1,8 +1,8 @@
 package be.salushealthcare.salus.person.staff;
 
 import be.salushealthcare.salus.person.CreatePersonInput;
+import be.salushealthcare.salus.timeslot.TimeSlotInput;
 import be.salushealthcare.salus.timeslot.shiftslot.ShiftSlot;
-import be.salushealthcare.salus.timeslot.shiftslot.ShiftSlotInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +31,7 @@ public class StaffService {
     }
 
     @Transactional
-    public Staff addShifts(long personId, List<ShiftSlotInput> shifts) {
+    public Staff addShifts(long personId, List<TimeSlotInput> shifts) {
         Staff staff = repository.getOne(personId);
         List<ShiftSlot> shiftSlots = shifts.stream()
                 .map(s -> ShiftSlot.builder()

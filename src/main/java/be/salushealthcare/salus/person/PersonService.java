@@ -18,20 +18,6 @@ public class PersonService {
         return repository.findAll(pageRequest).getContent();
     }
 
-    /*@Transactional
-    public Person create(CreatePersonInput input) {
-        return repository.saveAndFlush(Person
-                        .builder()
-                        .firstName(input.getFirstName())
-                        .lastName(input.getLastName())
-                        .birthDate(input.getBirthDate())
-                        .telephoneNumber(input.getTelephoneNumber())
-                        .residence(input.getResidence())
-                        .domicile(input.getDomicile())
-                        .teams(List.of())
-                        .build());
-    }*/
-
     @Transactional
     public Person update(Long personId, UpdatePersonInput input) {
         Person person = getById(personId);

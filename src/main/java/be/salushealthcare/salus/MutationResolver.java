@@ -10,11 +10,12 @@ import be.salushealthcare.salus.person.staff.Medic;
 import be.salushealthcare.salus.person.staff.MedicService;
 import be.salushealthcare.salus.person.staff.Staff;
 import be.salushealthcare.salus.person.staff.StaffService;
+import be.salushealthcare.salus.reservation.ReservationInput;
 import be.salushealthcare.salus.security.BadCredentialsException;
 import be.salushealthcare.salus.team.Team;
 import be.salushealthcare.salus.team.TeamMemberService;
 import be.salushealthcare.salus.team.TeamService;
-import be.salushealthcare.salus.timeslot.shiftslot.ShiftSlotInput;
+import be.salushealthcare.salus.timeslot.TimeSlotInput;
 import be.salushealthcare.salus.user.CreateUserInput;
 import be.salushealthcare.salus.user.UpdatePasswordInput;
 import be.salushealthcare.salus.user.User;
@@ -69,7 +70,7 @@ public class MutationResolver implements GraphQLMutationResolver {
         return personService.update(userService.getCurrentUser().getPersonId(), input);
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Team createTeam(String name) {
         return teamService.create(name, userService.getCurrentUser());
     }
@@ -130,7 +131,17 @@ public class MutationResolver implements GraphQLMutationResolver {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Staff addShifts(long personId, List<ShiftSlotInput> shifts) {
+    public Staff addShifts(long personId, List<TimeSlotInput> shifts) {
         return staffService.addShifts(personId, shifts);
+    }
+
+    @PreAuthorize("hasAuthority('MEDIC')")
+    public Medic addReservationSlot(List<TimeSlotInput> reservationSlots) {
+        return medicService.addReservationSlots(reservationSlots);
+    }
+
+    @PreAuthorize("hasAuthority('PATIENT')")
+    public Patient reserve(ReservationInput reservation) {
+        return patientService.reserve(reservation);
     }
 }
