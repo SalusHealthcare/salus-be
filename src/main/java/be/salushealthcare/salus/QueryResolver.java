@@ -4,6 +4,7 @@ import be.salushealthcare.salus.person.Person;
 import be.salushealthcare.salus.person.PersonService;
 import be.salushealthcare.salus.person.PersonSort;
 import be.salushealthcare.salus.person.patient.Patient;
+import be.salushealthcare.salus.person.patient.PatientService;
 import be.salushealthcare.salus.person.staff.Medic;
 import be.salushealthcare.salus.person.staff.MedicService;
 import be.salushealthcare.salus.reservation.ReservationInput;
@@ -27,6 +28,7 @@ public class QueryResolver implements GraphQLQueryResolver {
     private final PersonService personService;
     private final TeamService teamService;
     private final UserService userService;
+    private final PatientService patientService;
     private final MedicService medicService;
     private final ReservationSlotService reservationSlotService;
 
@@ -60,17 +62,22 @@ public class QueryResolver implements GraphQLQueryResolver {
         return teamService.getById(teamId);
     }
 
-    @PreAuthorize("hasAuthority('PATIENT')")
+    @PreAuthorize("hasAuthority('USER')")
     public List<Medic> getMedics(int page, int size, PersonSort sort, MedicalSpeciality speciality) {
         return medicService.getMedics(page, size, sort, speciality);
     }
 
-    @PreAuthorize("hasAuthority('PATIENT')")
+    @PreAuthorize("hasAuthority('USER')")
     public List<ReservationSlot> getReservationSlots(int page, int size, Long medicId, MedicalSpeciality speciality) {
         if (medicId != null && speciality != null) {
             throw new RuntimeException("Cannot filter for both medicId and speciality");
         }
         return reservationSlotService.getReservationSlots(page, size, medicId, speciality);
+    }
+
+    @PreAuthorize("hasAuthority('STAFF')")
+    public List<Patient> getPatients(int page, int size, PersonSort sort, String firstName, String lastName, String taxCode) {
+        return patientService.getAll(page, size, sort, firstName, lastName, taxCode);
     }
 
     public User getCurrentUser() {

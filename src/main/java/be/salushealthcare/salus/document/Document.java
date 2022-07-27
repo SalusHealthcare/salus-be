@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -26,6 +27,8 @@ public class Document {
     private Long id;
 
     private String description;
+
+    private LocalDateTime insertedAt;
 
     private MedicalSpeciality category;
 

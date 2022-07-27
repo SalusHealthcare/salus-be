@@ -54,6 +54,6 @@ public class MedicService {
 
     public List<Medic> getMedics(int page, int size, PersonSort sort, MedicalSpeciality speciality) {
         PageRequest pageRequest = PageRequest.of(page, size, sort == null ? Sort.unsorted() : sort.getSort());
-        return repository.findAll(pageRequest).getContent();
+        return speciality == null ? repository.findAll(pageRequest).getContent() : repository.findMedicsBySpeciality(pageRequest, speciality);
     }
 }

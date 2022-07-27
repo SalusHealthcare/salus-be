@@ -8,6 +8,7 @@ type Query {
     currentUser: User
 
     medics(page: Int!, size: Int!, sort: PersonSort, speciality: MedicalSpeciality): [Medic]
+    patients(page: Int!, size: Int!, sort: PersonSort, firstName: String, lastName: String, taxCode: String): [Patient]
     reservationSlots(page: Int!, size: Int!, medicId: ID, speciality: MedicalSpeciality): [ReservationSlot]
 }
 
@@ -164,6 +165,7 @@ type TeamMember {
 type Document {
     id: ID
     description: String
+    insertedAt: DateTime
     category: MedicalSpeciality
     documentType: DocumentType
 }
