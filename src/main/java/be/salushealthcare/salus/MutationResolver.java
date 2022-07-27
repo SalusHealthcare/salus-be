@@ -1,11 +1,13 @@
 package be.salushealthcare.salus;
 
+import be.salushealthcare.salus.document.DocumentInput;
 import be.salushealthcare.salus.person.CreatePersonInput;
 import be.salushealthcare.salus.person.Person;
 import be.salushealthcare.salus.person.PersonService;
 import be.salushealthcare.salus.person.UpdatePersonInput;
 import be.salushealthcare.salus.person.patient.Patient;
 import be.salushealthcare.salus.person.patient.PatientService;
+import be.salushealthcare.salus.person.staff.CreateMedicInput;
 import be.salushealthcare.salus.person.staff.Medic;
 import be.salushealthcare.salus.person.staff.MedicService;
 import be.salushealthcare.salus.person.staff.Staff;
@@ -55,7 +57,7 @@ public class MutationResolver implements GraphQLMutationResolver {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public User createMedicUser(CreateUserInput userInfo, CreatePersonInput personInput) {
+    public User createMedicUser(CreateUserInput userInfo, CreateMedicInput personInput) {
         Medic person = medicService.create(personInput);
         return userService.createUser(person, userInfo);
     }
@@ -143,5 +145,10 @@ public class MutationResolver implements GraphQLMutationResolver {
     @PreAuthorize("hasAuthority('PATIENT')")
     public Patient reserve(ReservationInput reservation) {
         return patientService.reserve(reservation);
+    }
+
+    @PreAuthorize("hasAuthority('MEDIC')")
+    public Patient insertDocuments(Long patientId, List<DocumentInput> documents) {
+        return patientService.uploadDocuments(patientId, documents);
     }
 }

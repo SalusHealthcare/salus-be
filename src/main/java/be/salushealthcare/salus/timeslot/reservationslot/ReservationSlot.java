@@ -1,5 +1,6 @@
 package be.salushealthcare.salus.timeslot.reservationslot;
 
+import be.salushealthcare.salus.MedicalSpeciality;
 import be.salushealthcare.salus.person.staff.Medic;
 import be.salushealthcare.salus.reservation.Reservation;
 import be.salushealthcare.salus.timeslot.TimeSlot;
@@ -29,6 +30,8 @@ public class ReservationSlot extends TimeSlot {
 
     @OneToOne
     private Medic medic;
+
+    private MedicalSpeciality speciality;
 
     // TODO capire se necessario cambiare questo metodo in futuro
     private ReservationSlot book () {

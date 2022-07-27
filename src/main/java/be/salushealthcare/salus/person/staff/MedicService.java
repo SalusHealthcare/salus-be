@@ -1,11 +1,13 @@
 package be.salushealthcare.salus.person.staff;
 
-import be.salushealthcare.salus.person.CreatePersonInput;
+import be.salushealthcare.salus.MedicalSpeciality;
+import be.salushealthcare.salus.person.PersonSort;
 import be.salushealthcare.salus.timeslot.TimeSlotInput;
 import be.salushealthcare.salus.timeslot.reservationslot.ReservationSlot;
-import be.salushealthcare.salus.timeslot.shiftslot.ShiftSlot;
 import be.salushealthcare.salus.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +21,7 @@ public class MedicService {
     private final UserService userService;
 
     @Transactional
-    public Medic create(CreatePersonInput input) {
+    public Medic create(CreateMedicInput input) {
         return repository.saveAndFlush(Medic
                 .builder()
                 .firstName(input.getFirstName())
@@ -28,6 +30,7 @@ public class MedicService {
                 .telephoneNumber(input.getTelephoneNumber())
                 .residence(input.getResidence())
                 .domicile(input.getDomicile())
+                .speciality(input.getMedicalSpeciality())
                 .teams(List.of())
                 .shiftSlots(List.of())
                 .reservationSlots(List.of())
@@ -42,13 +45,15 @@ public class MedicService {
                         .startDateTime(s.getStartDateTime())
                         .durationInHours(s.getDurationInHours())
                         .medic(current)
+                        .speciality(current.getSpeciality())
                         .build())
                 .collect(Collectors.toList());
         current.getReservationSlots().addAll(reservationSlots);
         return current;
     }
 
-    public List<Medic> getAll() {
-        return repository.findAll();
+    public List<Medic> getMedics(int page, int size, PersonSort sort, MedicalSpeciality speciality) {
+        PageRequest pageRequest = PageRequest.of(page, size, sort == null ? Sort.unsorted() : sort.getSort());
+        return repository.findAll(pageRequest).getContent();
     }
 }

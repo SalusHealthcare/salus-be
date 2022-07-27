@@ -3,6 +3,7 @@ package be.salushealthcare.salus;
 import be.salushealthcare.salus.person.Person;
 import be.salushealthcare.salus.person.PersonService;
 import be.salushealthcare.salus.person.PersonSort;
+import be.salushealthcare.salus.person.patient.Patient;
 import be.salushealthcare.salus.person.staff.Medic;
 import be.salushealthcare.salus.person.staff.MedicService;
 import be.salushealthcare.salus.reservation.ReservationInput;
@@ -30,8 +31,8 @@ public class QueryResolver implements GraphQLQueryResolver {
     private final ReservationSlotService reservationSlotService;
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Person> getAllPeople(int page, int size, PersonSort sort) {
-        return personService.getAll(page, size, sort);
+    public List<Person> getAllPeople(int page, int size, PersonSort sort, String role) {
+        return personService.getAll(page, size, sort, role);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -60,18 +61,16 @@ public class QueryResolver implements GraphQLQueryResolver {
     }
 
     @PreAuthorize("hasAuthority('PATIENT')")
-    public List<Medic> getMedics() {
-        return medicService.getAll();
+    public List<Medic> getMedics(int page, int size, PersonSort sort, MedicalSpeciality speciality) {
+        return medicService.getMedics(page, size, sort, speciality);
     }
 
     @PreAuthorize("hasAuthority('PATIENT')")
-    public List<ReservationSlot> getReservationSlots(Long medicId, Boolean booked) {
-        return reservationSlotService.getReservationSlots(medicId, booked);
-    }
-
-    @PreAuthorize("hasAuthority('PATIENT')")
-    public List<ReservationSlot> getAllReservationSlots(Boolean booked) {
-        return reservationSlotService.getAllReservationSlots(booked);
+    public List<ReservationSlot> getReservationSlots(int page, int size, Long medicId, MedicalSpeciality speciality) {
+        if (medicId != null && speciality != null) {
+            throw new RuntimeException("Cannot filter for both medicId and speciality");
+        }
+        return reservationSlotService.getReservationSlots(page, size, medicId, speciality);
     }
 
     public User getCurrentUser() {

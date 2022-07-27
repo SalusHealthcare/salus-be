@@ -1,5 +1,5 @@
 type Query {
-    allPeople(page: Int!, size: Int!, sort: PersonSort): [Person]
+    allPeople(page: Int!, size: Int!, sort: PersonSort, role: String): [Person]
     peopleCount: Int
     person(personId: ID!): Person
     allTeams(page: Int!, size: Int!, sort: TeamSort): [Team]
@@ -7,15 +7,14 @@ type Query {
     team(teamId: ID!): Team
     currentUser: User
 
-    medics: [Medic]
-    reservationSlots(medidId: ID, bookable: Boolean): [ReservationSlot]
-    allReservationSlots(bookable: Boolean): [ReservationSlot]
+    medics(page: Int!, size: Int!, sort: PersonSort, speciality: MedicalSpeciality): [Medic]
+    reservationSlots(page: Int!, size: Int!, medicId: ID, speciality: MedicalSpeciality): [ReservationSlot]
 }
 
 type Mutation {
     createPatientUser(userInfo: CreateUserInput!, personInfo: CreatePersonInput!): User
     createStaffUser(userInfo: CreateUserInput!, personInfo: CreatePersonInput!): User
-    createMedicUser(userInfo: CreateUserInput!, personInfo: CreatePersonInput!): User
+    createMedicUser(userInfo: CreateUserInput!, personInfo: CreateMedicInput!): User
     updatePassword(input: UpdatePasswordInput!): User
     updatePerson(input: UpdatePersonInput!): Person
     createTeam(name: String!): Team
@@ -28,10 +27,11 @@ type Mutation {
     replaceTeamLeader(teamId: ID!, personId: ID!): Team
     promotePerson(personId: ID!): Person
     unpromotePerson(personId: ID!): Person
-
     addShifts(personId: ID!, shifts: [TimeSlotInput]): Worker
     addReservationSlot(reservationSlots: [TimeSlotInput]): Medic
     reserve(reservation: ReservationInput): Patient
+
+    insertDocuments(patientId: ID!, documents: [DocumentInput]!): Patient
 }
 
 # INTERFACES
@@ -103,6 +103,7 @@ type Medic implements Person {
     roles: [String]
     teams: [TeamMember]
     shiftSlots: [ShiftSlot]
+    speciality: MedicalSpeciality
     reservationSlots: [ReservationSlot]
 }
 
@@ -231,22 +232,33 @@ input CreateUserInput {
 }
 
 input CreatePersonInput {
-    firstName: String
-    lastName: String
-    birthDate: String
-    telephoneNumber: String
+    firstName: String!
+    lastName: String!
+    birthDate: String!
+    telephoneNumber: String!
     taxCode: String!
-    residence: AddressInput
-    domicile: AddressInput
+    residence: AddressInput!
+    domicile: AddressInput!
+}
+
+input CreateMedicInput {
+    firstName: String!
+    lastName: String!
+    birthDate: String!
+    telephoneNumber: String!
+    taxCode: String!
+    residence: AddressInput!
+    domicile: AddressInput!
+    medicalSpeciality: MedicalSpeciality!
 }
 
 input AddressInput {
-    street: String
-    number: String
-    city: String
-    province: String
-    postCode: String
-    country: String
+    street: String!
+    number: String!
+    city: String!
+    province: String!
+    postCode: String!
+    country: String!
 }
 
 input PersonSort {
@@ -283,4 +295,9 @@ input ReservationInput {
     reservationSlotId: ID!
     description: String
     priority: Priority
+}
+
+input DocumentInput {
+    description: String
+    documentType: DocumentType
 }

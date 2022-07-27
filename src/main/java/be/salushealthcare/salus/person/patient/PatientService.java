@@ -1,6 +1,10 @@
 package be.salushealthcare.salus.person.patient;
 
+import be.salushealthcare.salus.document.Document;
+import be.salushealthcare.salus.document.DocumentInput;
 import be.salushealthcare.salus.person.CreatePersonInput;
+import be.salushealthcare.salus.person.staff.Medic;
+import be.salushealthcare.salus.person.staff.MedicService;
 import be.salushealthcare.salus.reservation.Reservation;
 import be.salushealthcare.salus.reservation.ReservationInput;
 import be.salushealthcare.salus.timeslot.TimeSlotRepository;
@@ -12,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,5 +52,20 @@ public class PatientService {
                 .build();
         current.getReservations().add(reservation);
         return current;
+    }
+
+    public Patient uploadDocuments(Long patientId, List<DocumentInput> inputs) {
+        Patient patient = repository.getOne(patientId);
+        Medic editor = (Medic) userService.getCurrentUser().getPerson();
+        List<Document> documents = inputs.stream()
+                .map(d -> Document.builder()
+                        .description(d.getDescription())
+                        .documentType(d.getDocumentType())
+                        .editor(editor)
+                        .category(editor.getSpeciality())
+                        .build())
+                .collect(Collectors.toList());
+        patient.getMedicalRecord().addAll(documents);
+        return patient;
     }
 }

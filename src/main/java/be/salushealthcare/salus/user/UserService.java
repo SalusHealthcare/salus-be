@@ -3,6 +3,7 @@ package be.salushealthcare.salus.user;
 import be.salushealthcare.salus.person.Person;
 import be.salushealthcare.salus.person.PersonService;
 import be.salushealthcare.salus.person.patient.Patient;
+import be.salushealthcare.salus.person.staff.Medic;
 import be.salushealthcare.salus.person.staff.Staff;
 import be.salushealthcare.salus.security.BadCredentialsException;
 import be.salushealthcare.salus.security.BadTokenException;
@@ -84,7 +85,7 @@ public class UserService implements UserDetailsService {
         if (person instanceof Patient) {
             authorities = Set.of(USER_AUTHORITY);
         } else {
-            authorities = person instanceof Staff ? Set.of(STAFF_AUTHORITY) : Set.of(STAFF_AUTHORITY, MEDIC_AUTHORITY);
+            authorities = person instanceof Medic ? Set.of(STAFF_AUTHORITY, MEDIC_AUTHORITY) : Set.of(STAFF_AUTHORITY);
         }
         if (!exists(input)) {
             return repository.saveAndFlush(User

@@ -11,8 +11,9 @@ import org.springframework.stereotype.Component;
 import java.util.Set;
 
 @Component
-public class CommandLineAppStartupRunner implements CommandLineRunner {
-    @Autowired
+public class CommandLineAppStartupRunner {
+        //implements CommandLineRunner {
+    /*@Autowired
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -40,5 +41,5 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
                     .build();
             userRepository.save(admin);
         }
-    }
+    }*/
 }

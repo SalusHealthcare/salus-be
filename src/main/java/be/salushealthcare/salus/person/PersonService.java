@@ -5,7 +5,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -13,9 +16,15 @@ import java.util.List;
 public class PersonService {
     private final PersonRepository repository;
 
-    public List<Person> getAll(int page, int size, PersonSort sort) {
+    public List<Person> getAll(int page, int size, PersonSort sort, String role) {
         PageRequest pageRequest = PageRequest.of(page, size, sort == null ? Sort.unsorted() : sort.getSort());
-        return repository.findAll(pageRequest).getContent();
+        List<Person> response;
+        if (StringUtils.isEmpty(role)) {
+            response = repository.findAll(pageRequest).getContent();
+        } else {
+            response = repository.findAllByUserRoles(pageRequest, role);
+        }
+        return response;
     }
 
     @Transactional
