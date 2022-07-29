@@ -63,8 +63,8 @@ public class QueryResolver implements GraphQLQueryResolver {
     }
 
     @PreAuthorize("hasAuthority('USER')")
-    public List<Medic> getMedics(int page, int size, PersonSort sort, MedicalSpeciality speciality) {
-        return medicService.getMedics(page, size, sort, speciality);
+    public List<Medic> getMedics(int page, int size, PersonSort sort, MedicalSpeciality speciality, String team) {
+        return medicService.getMedics(page, size, sort, speciality, team);
     }
 
     @PreAuthorize("hasAuthority('USER')")

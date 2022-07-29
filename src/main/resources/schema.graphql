@@ -7,9 +7,9 @@ type Query {
     team(teamId: ID!): Team
     currentUser: User
 
-    medics(page: Int!, size: Int!, sort: PersonSort, speciality: MedicalSpeciality): [Medic]
+    medics(page: Int!, size: Int!, sort: PersonSort, speciality: MedicalSpeciality, team: String): [Medic]
     patients(page: Int!, size: Int!, sort: PersonSort, firstName: String, lastName: String, taxCode: String): [Patient]
-    reservationSlots(page: Int!, size: Int!, medicId: ID, speciality: MedicalSpeciality): [ReservationSlot]
+    reservationSlots(page: Int!, size: Int!, medicId: ID, speciality: MedicalSpeciality, team: ID): [ReservationSlot]
 }
 
 type Mutation {
@@ -18,14 +18,13 @@ type Mutation {
     createMedicUser(userInfo: CreateUserInput!, personInfo: CreateMedicInput!): User
     updatePassword(input: UpdatePasswordInput!): User
     updatePerson(input: UpdatePersonInput!): Person
-    createTeam(name: String!): Team
+    createTeam(name: String!, staffId: ID!): Team
     login(email: String!, password: String!): User
-    joinTeam(teamId: ID!): Team
-    leaveTeam(teamId: ID!): Team
+    addToTeam(teamId: ID!, staffIDs: [String!]): Team
+    removeFromTeam(teamId: ID!, staffIds: [String!]): Team
     deleteUser(personId: ID!): Boolean
     deleteTeam(teamId: ID!): Boolean
-    approveTeamMember(teamId: ID!, personId: ID!): Team
-    replaceTeamLeader(teamId: ID!, personId: ID!): Team
+    replaceTeamLeader(teamId: ID!, staffId: ID!): Team
     promotePerson(personId: ID!): Person
     unpromotePerson(personId: ID!): Person
     addShifts(personId: ID!, shifts: [TimeSlotInput]): Worker
@@ -87,7 +86,7 @@ type Staff implements Person {
     birthDate: Date
     telephoneNumber: String
     roles: [String]
-    teams: [TeamMember]
+    teams: [Team]
     shiftSlots: [ShiftSlot]
 }
 
@@ -102,7 +101,7 @@ type Medic implements Person {
     birthDate: Date
     telephoneNumber: String
     roles: [String]
-    teams: [TeamMember]
+    teams: [Team]
     shiftSlots: [ShiftSlot]
     speciality: MedicalSpeciality
     reservationSlots: [ReservationSlot]
@@ -150,16 +149,11 @@ type Address {
 type Team {
     id: ID
     name: String
-    leader: Person
-    members(withUnapproved: Boolean): [TeamMember]
-    memberCount(withUnapproved: Boolean): Int
+    leader: Staff
+    members: [Staff]
+    memberCount: Int
     isLeader: Boolean
     isMember: Boolean
-}
-
-type TeamMember {
-    person: Person
-    approved: Boolean
 }
 
 type Document {

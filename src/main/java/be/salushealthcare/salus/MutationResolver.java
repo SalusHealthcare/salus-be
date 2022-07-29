@@ -15,7 +15,6 @@ import be.salushealthcare.salus.person.staff.StaffService;
 import be.salushealthcare.salus.reservation.ReservationInput;
 import be.salushealthcare.salus.security.BadCredentialsException;
 import be.salushealthcare.salus.team.Team;
-import be.salushealthcare.salus.team.TeamMemberService;
 import be.salushealthcare.salus.team.TeamService;
 import be.salushealthcare.salus.timeslot.TimeSlotInput;
 import be.salushealthcare.salus.user.CreateUserInput;
@@ -42,7 +41,6 @@ public class MutationResolver implements GraphQLMutationResolver {
     private final StaffService staffService;
     private final MedicService medicService;
     private final TeamService teamService;
-    private final TeamMemberService teamMemberService;
     private final AuthenticationProvider authenticationProvider;
 
     public User createPatientUser(CreateUserInput userInfo, CreatePersonInput personInput) {
@@ -73,8 +71,23 @@ public class MutationResolver implements GraphQLMutationResolver {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Team createTeam(String name) {
-        return teamService.create(name, userService.getCurrentUser());
+    public Team createTeam(String name, Long staffId) {
+        return teamService.create(name, staffId);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Team replaceTeamLeader(Long teamdId, Long staffId) {
+        return teamService.replaceTeamLeader(teamdId, staffId);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Team addToTeam(Long teamId, List<Long> staffIds) {
+        return teamService.addToTeam(teamId, staffIds);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Team removeFromTeam(Long teamId, List<Long> staffIds) {
+        return teamService.removeFromTeam(teamId, staffIds);
     }
 
     @PreAuthorize("isAnonymous()")
@@ -88,18 +101,6 @@ public class MutationResolver implements GraphQLMutationResolver {
         }
     }
 
-    @PreAuthorize("isAuthenticated()")
-    public Team joinTeam(long teamId) {
-        teamMemberService.join(teamId, userService.getCurrentUser(), userService.isAdmin());
-        return teamService.getById(teamId);
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    public Team leaveTeam(long teamId) {
-        teamMemberService.leave(teamId, userService.getCurrentUser());
-        return teamService.getById(teamId);
-    }
-
     @PreAuthorize("hasAuthority('ADMIN')")
     public boolean deleteUser(long personId) {
         return userService.deleteUser(personId);
@@ -108,18 +109,6 @@ public class MutationResolver implements GraphQLMutationResolver {
     @PreAuthorize("hasAuthority('ADMIN')")
     public boolean deleteTeam(long teamId) {
         return teamService.deleteTeam(teamId);
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    public Team approveTeamMember(long teamId, long personId) {
-        teamMemberService.approve(teamId, personId, userService.getCurrentUser());
-        return teamService.getById(teamId);
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    public Team replaceTeamLeader(long teamId, long personId) {
-        teamMemberService.replaceTeamLeader(teamId, personId, userService.getCurrentUser());
-        return teamService.getById(teamId);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

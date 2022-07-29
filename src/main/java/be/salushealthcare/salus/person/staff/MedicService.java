@@ -2,6 +2,8 @@ package be.salushealthcare.salus.person.staff;
 
 import be.salushealthcare.salus.MedicalSpeciality;
 import be.salushealthcare.salus.person.PersonSort;
+import be.salushealthcare.salus.team.TeamRepository;
+import be.salushealthcare.salus.team.TeamService;
 import be.salushealthcare.salus.timeslot.TimeSlotInput;
 import be.salushealthcare.salus.timeslot.reservationslot.ReservationSlot;
 import be.salushealthcare.salus.user.UserService;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MedicService {
     private final MedicRepository repository;
+    private final TeamRepository teamRepository;
     private final UserService userService;
 
     @Transactional
@@ -52,8 +55,29 @@ public class MedicService {
         return current;
     }
 
-    public List<Medic> getMedics(int page, int size, PersonSort sort, MedicalSpeciality speciality) {
+    public List<Medic> getMedics(int page, int size, PersonSort sort, MedicalSpeciality speciality, String team) {
         PageRequest pageRequest = PageRequest.of(page, size, sort == null ? Sort.unsorted() : sort.getSort());
-        return speciality == null ? repository.findAll(pageRequest).getContent() : repository.findMedicsBySpeciality(pageRequest, speciality);
+        List<Medic> response = null;
+        if (speciality == null && team == null) response = repository.findAll(pageRequest).getContent();
+        if (speciality != null && team == null) response = repository.findMedicsBySpeciality(pageRequest, speciality);
+        if (speciality == null && team != null) {
+            response = teamRepository
+                    .getTeamByName(team)
+                    .getMembers()
+                    .stream()
+                    .filter(Medic.class::isInstance)
+                    .map(Medic.class::cast).collect(Collectors.toList());
+        }
+        if (speciality != null && team != null) {
+            response = teamRepository
+                    .getTeamByName(team)
+                    .getMembers()
+                    .stream()
+                    .filter(Medic.class::isInstance)
+                    .map(Medic.class::cast)
+                    .filter(medic -> medic.getSpeciality() == speciality)
+                    .collect(Collectors.toList());
+        }
+        return response;
     }
 }

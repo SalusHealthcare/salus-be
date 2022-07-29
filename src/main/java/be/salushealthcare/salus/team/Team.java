@@ -1,6 +1,7 @@
 package be.salushealthcare.salus.team;
 
 import be.salushealthcare.salus.person.Person;
+import be.salushealthcare.salus.person.staff.Staff;
 import be.salushealthcare.salus.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.util.List;
 
 // TODO general refactor to accomplish the purpose of the project
@@ -28,14 +30,13 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @ManyToOne
-    @JoinColumn(name = "leader_person_id")
-    private Person leader;
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
-    private List<TeamMember> members;
+    @OneToOne
+    private Staff leader;
+    @OneToMany
+    private List<Staff> members;
 
-    public Team assignLeader(TeamMember member) {
-        this.leader = member.getPerson();
+    public Team assignLeader(Staff member) {
+        this.leader = member;
         return this;
     }
 
