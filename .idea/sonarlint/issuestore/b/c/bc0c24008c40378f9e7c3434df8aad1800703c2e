@@ -1,0 +1,11 @@
+
+h
+java:S3776""RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(Ÿš°—
+^
+java:S1128"CRemove this unused import 'be.salushealthcare.salus.person.Person'.(Ä¨Ú°ûÿÿÿÿ
+e
+java:S1128	"ORemove this unused import 'be.salushealthcare.salus.person.staff.MedicService'.(øÊë‹
+f
+java:S1128"KRemove this unused import 'org.springframework.security.core.parameters.P'.(Æ­Åıÿÿÿÿ
+V
+java:S1128"ARemove this unused import 'org.springframework.util.StringUtils'.(Ğôÿ

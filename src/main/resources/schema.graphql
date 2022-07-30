@@ -2,14 +2,13 @@ type Query {
     allPeople(page: Int!, size: Int!, sort: PersonSort, role: String): [Person]
     peopleCount: Int
     person(personId: ID!): Person
-    allTeams(page: Int!, size: Int!, sort: TeamSort): [Team]
-    teamCount: Int
-    team(teamId: ID!): Team
     currentUser: User
 
-    medics(page: Int!, size: Int!, sort: PersonSort, speciality: MedicalSpeciality, team: String): [Medic]
+    medics(page: Int!, size: Int!, sort: PersonSort, speciality: MedicalSpeciality): [Medic]
     patients(page: Int!, size: Int!, sort: PersonSort, firstName: String, lastName: String, taxCode: String): [Patient]
-    reservationSlots(page: Int!, size: Int!, medicId: ID, speciality: MedicalSpeciality, team: ID): [ReservationSlot]
+    reservationSlots(page: Int!, size: Int!, medicId: ID, speciality: MedicalSpeciality): [ReservationSlot]
+
+    # methods to filter documents, reservations, reservationSlots, shiftSlots
 }
 
 type Mutation {
@@ -18,20 +17,16 @@ type Mutation {
     createMedicUser(userInfo: CreateUserInput!, personInfo: CreateMedicInput!): User
     updatePassword(input: UpdatePasswordInput!): User
     updatePerson(input: UpdatePersonInput!): Person
-    createTeam(name: String!, staffId: ID!): Team
     login(email: String!, password: String!): User
-    addToTeam(teamId: ID!, staffIDs: [String!]): Team
-    removeFromTeam(teamId: ID!, staffIds: [String!]): Team
     deleteUser(personId: ID!): Boolean
-    deleteTeam(teamId: ID!): Boolean
-    replaceTeamLeader(teamId: ID!, staffId: ID!): Team
     promotePerson(personId: ID!): Person
     unpromotePerson(personId: ID!): Person
     addShifts(personId: ID!, shifts: [TimeSlotInput]): Worker
     addReservationSlot(reservationSlots: [TimeSlotInput]): Medic
     reserve(reservation: ReservationInput): Patient
-
     insertDocuments(patientId: ID!, documents: [DocumentInput]!): Patient
+
+    #
 }
 
 # INTERFACES
@@ -86,7 +81,6 @@ type Staff implements Person {
     birthDate: Date
     telephoneNumber: String
     roles: [String]
-    teams: [Team]
     shiftSlots: [ShiftSlot]
 }
 
@@ -101,7 +95,6 @@ type Medic implements Person {
     birthDate: Date
     telephoneNumber: String
     roles: [String]
-    teams: [Team]
     shiftSlots: [ShiftSlot]
     speciality: MedicalSpeciality
     reservationSlots: [ReservationSlot]
@@ -146,16 +139,6 @@ type Address {
     country: String
 }
 
-type Team {
-    id: ID
-    name: String
-    leader: Staff
-    members: [Staff]
-    memberCount: Int
-    isLeader: Boolean
-    isMember: Boolean
-}
-
 type Document {
     id: ID
     description: String
@@ -185,10 +168,6 @@ type DateTime {
 enum PersonSortField {
     LAST_NAME
     BIRTH_DATE
-}
-
-enum TeamSortField {
-    NAME
 }
 
 enum Order {
@@ -259,11 +238,6 @@ input AddressInput {
 
 input PersonSort {
     field: PersonSortField
-    order: Order
-}
-
-input TeamSort {
-    field: TeamSortField
     order: Order
 }
 

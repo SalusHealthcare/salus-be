@@ -7,10 +7,6 @@ import be.salushealthcare.salus.person.patient.Patient;
 import be.salushealthcare.salus.person.patient.PatientService;
 import be.salushealthcare.salus.person.staff.Medic;
 import be.salushealthcare.salus.person.staff.MedicService;
-import be.salushealthcare.salus.reservation.ReservationInput;
-import be.salushealthcare.salus.team.Team;
-import be.salushealthcare.salus.team.TeamService;
-import be.salushealthcare.salus.team.TeamSort;
 import be.salushealthcare.salus.timeslot.reservationslot.ReservationSlot;
 import be.salushealthcare.salus.timeslot.reservationslot.ReservationSlotService;
 import be.salushealthcare.salus.user.User;
@@ -26,7 +22,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class QueryResolver implements GraphQLQueryResolver {
     private final PersonService personService;
-    private final TeamService teamService;
     private final UserService userService;
     private final PatientService patientService;
     private final MedicService medicService;
@@ -47,24 +42,9 @@ public class QueryResolver implements GraphQLQueryResolver {
         return personService.getById(personId);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Team> getAllTeams(int page, int size, TeamSort sort) {
-        return teamService.getAll(page, size, sort);
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public long getTeamCount() {
-        return teamService.countAll();
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public Team getTeam(long teamId) {
-        return teamService.getById(teamId);
-    }
-
     @PreAuthorize("hasAuthority('USER')")
-    public List<Medic> getMedics(int page, int size, PersonSort sort, MedicalSpeciality speciality, String team) {
-        return medicService.getMedics(page, size, sort, speciality, team);
+    public List<Medic> getMedics(int page, int size, PersonSort sort, MedicalSpeciality speciality) {
+        return medicService.getMedics(page, size, sort, speciality);
     }
 
     @PreAuthorize("hasAuthority('USER')")

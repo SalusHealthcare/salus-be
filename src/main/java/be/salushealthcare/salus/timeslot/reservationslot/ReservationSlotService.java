@@ -2,12 +2,15 @@ package be.salushealthcare.salus.timeslot.reservationslot;
 
 
 import be.salushealthcare.salus.MedicalSpeciality;
+import be.salushealthcare.salus.person.staff.Medic;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
