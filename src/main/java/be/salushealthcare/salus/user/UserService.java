@@ -5,6 +5,7 @@ import be.salushealthcare.salus.person.PersonService;
 import be.salushealthcare.salus.person.patient.Patient;
 import be.salushealthcare.salus.person.staff.Medic;
 import be.salushealthcare.salus.person.staff.Staff;
+import be.salushealthcare.salus.person.staff.StaffService;
 import be.salushealthcare.salus.security.BadCredentialsException;
 import be.salushealthcare.salus.security.BadTokenException;
 import be.salushealthcare.salus.security.JWTUserDetails;
@@ -34,18 +35,19 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static be.salushealthcare.salus.Roles.ADMIN_AUTHORITY;
+import static be.salushealthcare.salus.Roles.MEDIC_AUTHORITY;
+import static be.salushealthcare.salus.Roles.STAFF_AUTHORITY;
+import static be.salushealthcare.salus.Roles.USER_AUTHORITY;
 import static be.salushealthcare.salus.StreamUtils.collectionStream;
 import static java.util.function.Predicate.not;
 
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
-    private static final String ADMIN_AUTHORITY = "ADMIN";
-    private static final String USER_AUTHORITY = "USER";
-    private static final String STAFF_AUTHORITY = "STAFF";
-    private static final String MEDIC_AUTHORITY = "MEDIC";
     private final UserRepository repository;
     private final PersonService personService;
+    private final StaffService staffService;
     private final SecurityProperties properties;
     private final Algorithm algorithm;
     private final JWTVerifier verifier;
@@ -57,7 +59,7 @@ public class UserService implements UserDetailsService {
         return repository
             .findByEmail(email)
             .map(user -> getUserDetails(user, getToken(user)))
-            .orElseThrow(() -> new UsernameNotFoundException("Username or password didn''t match"));
+            .orElseThrow(() -> new UsernameNotFoundException("Username or password did not match"));
     }
 
     @Transactional
@@ -136,6 +138,17 @@ public class UserService implements UserDetailsService {
             .anyMatch(ADMIN_AUTHORITY::equals);
     }
 
+    public boolean hasAuthority(String authority) {
+        return Optional
+            .ofNullable(SecurityContextHolder.getContext())
+            .map(SecurityContext::getAuthentication)
+            .map(Authentication::getAuthorities)
+            .stream()
+            .flatMap(Collection::stream)
+            .map(GrantedAuthority::getAuthority)
+            .anyMatch(authority::equals);
+    }
+
     public boolean isAuthenticated() {
         return Optional
             .ofNullable(SecurityContextHolder.getContext())
@@ -160,17 +173,17 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public Person promotePerson(Long personId) {
-        Person person = personService.getById(personId);
-        person.getUser().withRole(ADMIN_AUTHORITY);
-        return person;
+    public Staff promoteStaff(Long staffId) {
+        Staff staff = staffService.getStaffById(staffId);
+        staff.getUser().withRole(ADMIN_AUTHORITY);
+        return staff;
     }
 
     @Transactional
-    public Person unpromotePerson(Long personId) {
-        Person person = personService.getById(personId);
-        person.getUser().withoutRole(ADMIN_AUTHORITY);
-        return person;
+    public Staff unpromoteStaff(Long staffId) {
+        Staff staff = staffService.getStaffById(staffId);
+        staff.getUser().withoutRole(ADMIN_AUTHORITY);
+        return staff;
     }
 
     private boolean exists(CreateUserInput input) {

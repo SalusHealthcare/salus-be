@@ -3,12 +3,12 @@ package be.salushealthcare.salus.timeslot.reservationslot;
 
 import be.salushealthcare.salus.MedicalSpeciality;
 import be.salushealthcare.salus.person.staff.Medic;
+import be.salushealthcare.salus.timeslot.TimeSlotInput;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,12 +17,42 @@ import java.util.stream.Collectors;
 public class ReservationSlotService {
     ReservationSlotRepository repository;
 
-    public List<ReservationSlot> getReservationSlots(int page, int size, Long medicId, MedicalSpeciality speciality) {
+    public ReservationSlot getReservationSlot(Long id) {
+        return repository.getOne(id);
+    }
+
+    public List<ReservationSlot> getReservationSlots(String startString, String endString, Long medicId, MedicalSpeciality speciality, Boolean booked) {
+        LocalDateTime startDateTime = LocalDateTime.parse(startString);
+        LocalDateTime endDateTime = LocalDateTime.parse(endString);
         List<ReservationSlot> response = null;
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "startDateTime"));
-        if (medicId == null && speciality == null) response = repository.findReservationSlotsByBooked(pageRequest,false);
-        if (medicId != null && speciality == null) response = repository.findReservationSlotsByMedic_IdAndBooked(pageRequest, medicId, false);
-        if (medicId == null && speciality != null) response = repository.findReservationSlotsBySpecialityAndBooked(pageRequest, speciality, false);
+
+        if (medicId == null && speciality == null) throw new RuntimeException("Must filter for medicId or speciality");
+        if (medicId != null && speciality != null) throw new RuntimeException("Cannot filter for both medicId and speciality");
+
+        if (medicId != null) response =
+                booked == null ?
+                        repository.findReservationSlotsByMedic_IdAndStartDateTimeBetween(medicId, startDateTime, endDateTime) :
+                        repository.findReservationSlotsByMedic_IdAndStartDateTimeBetweenAndBooked(medicId, startDateTime, endDateTime, booked);
+
+        if (speciality != null) response =
+                booked == null ?
+                        repository.findReservationSlotsBySpecialityAndStartDateTimeBetween(speciality, startDateTime, endDateTime) :
+                        repository.findReservationSlotsBySpecialityAndStartDateTimeBetweenAndBooked(speciality, startDateTime, endDateTime, booked);
+
         return response;
+    }
+
+    @Transactional
+    public Medic addReservationSlots(Medic medic, List<TimeSlotInput> reservations) {
+        List<ReservationSlot> reservationSlots = reservations.stream()
+                .map(s -> ReservationSlot.builder()
+                        .startDateTime(s.getStartDateTime())
+                        .durationInHours(s.getDurationInHours())
+                        .medic(medic)
+                        .speciality(medic.getSpeciality())
+                        .build())
+                .collect(Collectors.toList());
+        repository.saveAll(reservationSlots);
+        return medic;
     }
 }

@@ -1,5 +1,8 @@
 package be.salushealthcare.salus;
 
+import be.salushealthcare.salus.document.Document;
+import be.salushealthcare.salus.document.DocumentService;
+import be.salushealthcare.salus.document.DocumentType;
 import be.salushealthcare.salus.person.Person;
 import be.salushealthcare.salus.person.PersonService;
 import be.salushealthcare.salus.person.PersonSort;
@@ -7,6 +10,7 @@ import be.salushealthcare.salus.person.patient.Patient;
 import be.salushealthcare.salus.person.patient.PatientService;
 import be.salushealthcare.salus.person.staff.Medic;
 import be.salushealthcare.salus.person.staff.MedicService;
+import be.salushealthcare.salus.person.staff.Staff;
 import be.salushealthcare.salus.timeslot.reservationslot.ReservationSlot;
 import be.salushealthcare.salus.timeslot.reservationslot.ReservationSlotService;
 import be.salushealthcare.salus.user.User;
@@ -26,6 +30,7 @@ public class QueryResolver implements GraphQLQueryResolver {
     private final PatientService patientService;
     private final MedicService medicService;
     private final ReservationSlotService reservationSlotService;
+    private final DocumentService documentService;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Person> getAllPeople(int page, int size, PersonSort sort, String role) {
@@ -48,11 +53,8 @@ public class QueryResolver implements GraphQLQueryResolver {
     }
 
     @PreAuthorize("hasAuthority('USER')")
-    public List<ReservationSlot> getReservationSlots(int page, int size, Long medicId, MedicalSpeciality speciality) {
-        if (medicId != null && speciality != null) {
-            throw new RuntimeException("Cannot filter for both medicId and speciality");
-        }
-        return reservationSlotService.getReservationSlots(page, size, medicId, speciality);
+    public List<ReservationSlot> getAvailableReservationSlots(String startDate, String endDate, Long medicId, MedicalSpeciality speciality) {
+        return reservationSlotService.getReservationSlots(startDate, endDate, medicId, speciality, false);
     }
 
     @PreAuthorize("hasAuthority('STAFF')")
@@ -60,7 +62,27 @@ public class QueryResolver implements GraphQLQueryResolver {
         return patientService.getAll(page, size, sort, firstName, lastName, taxCode);
     }
 
+    @PreAuthorize("hasAuthority('STAFF')")
+    public List<Document> getDocuments(Long patientId, int page, int size, String startDate, String endDate, MedicalSpeciality category, DocumentType documentType) {
+        return documentService.getDocuments(patientId, page, size, startDate, endDate, category, documentType);
+    }
+
     public User getCurrentUser() {
         return userService.getCurrentUser();
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    public Patient getCurrentPatient() {
+        return (Patient) userService.getCurrentUser().getPerson();
+    }
+
+    @PreAuthorize("hasAuthority('STAFF')")
+    public Staff getCurrentStaff() {
+        return (Staff) userService.getCurrentUser().getPerson();
+    }
+
+    @PreAuthorize("hasAuthority('MEDIC')")
+    public Medic getCurrentMedic() {
+        return (Medic) userService.getCurrentUser().getPerson();
     }
 }

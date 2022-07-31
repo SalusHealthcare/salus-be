@@ -5,10 +5,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -44,6 +42,6 @@ public class PersonService {
     }
 
     public Person getById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
+        return repository.findById(id).orElseThrow(() -> new PersonNotFoundException("Person", id));
     }
 }

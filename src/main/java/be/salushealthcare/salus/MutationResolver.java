@@ -1,6 +1,8 @@
 package be.salushealthcare.salus;
 
+import be.salushealthcare.salus.document.Document;
 import be.salushealthcare.salus.document.DocumentInput;
+import be.salushealthcare.salus.document.DocumentService;
 import be.salushealthcare.salus.person.CreatePersonInput;
 import be.salushealthcare.salus.person.Person;
 import be.salushealthcare.salus.person.PersonService;
@@ -12,9 +14,13 @@ import be.salushealthcare.salus.person.staff.Medic;
 import be.salushealthcare.salus.person.staff.MedicService;
 import be.salushealthcare.salus.person.staff.Staff;
 import be.salushealthcare.salus.person.staff.StaffService;
+import be.salushealthcare.salus.reservation.Reservation;
 import be.salushealthcare.salus.reservation.ReservationInput;
+import be.salushealthcare.salus.reservation.ReservationService;
 import be.salushealthcare.salus.security.BadCredentialsException;
 import be.salushealthcare.salus.timeslot.TimeSlotInput;
+import be.salushealthcare.salus.timeslot.reservationslot.ReservationSlotService;
+import be.salushealthcare.salus.timeslot.shiftslot.ShiftSlotService;
 import be.salushealthcare.salus.user.CreateUserInput;
 import be.salushealthcare.salus.user.UpdatePasswordInput;
 import be.salushealthcare.salus.user.User;
@@ -38,6 +44,10 @@ public class MutationResolver implements GraphQLMutationResolver {
     private final PatientService patientService;
     private final StaffService staffService;
     private final MedicService medicService;
+    private final ShiftSlotService shiftSlotService;
+    private final DocumentService documentService;
+    private final ReservationSlotService reservationSlotService;
+    private final ReservationService reservationService;
     private final AuthenticationProvider authenticationProvider;
 
     public User createPatientUser(CreateUserInput userInfo, CreatePersonInput personInput) {
@@ -84,32 +94,32 @@ public class MutationResolver implements GraphQLMutationResolver {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Person promotePerson(long personId) {
-        return userService.promotePerson(personId);
+    public Staff promoteStaff(long personId) {
+        return userService.promoteStaff(personId);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Person unpromotePerson(long personId) {
-        return userService.unpromotePerson(personId);
+    public Staff unpromoteStaff(long personId) {
+        return userService.unpromoteStaff(personId);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Staff addShifts(long personId, List<TimeSlotInput> shifts) {
-        return staffService.addShifts(personId, shifts);
+    public Staff addShifts(long staffId, List<TimeSlotInput> shifts) {
+        return shiftSlotService.addShifts((Staff) userService.getCurrentUser().getPerson(), shifts);
     }
 
     @PreAuthorize("hasAuthority('MEDIC')")
     public Medic addReservationSlot(List<TimeSlotInput> reservationSlots) {
-        return medicService.addReservationSlots(reservationSlots);
+        return reservationSlotService.addReservationSlots((Medic) userService.getCurrentUser().getPerson(), reservationSlots);
     }
 
     @PreAuthorize("hasAuthority('PATIENT')")
-    public Patient reserve(ReservationInput reservation) {
-        return patientService.reserve(reservation);
+    public Reservation reserve(ReservationInput reservation) {
+        return reservationService.reserve((Patient) userService.getCurrentUser().getPerson(), reservation);
     }
 
     @PreAuthorize("hasAuthority('MEDIC')")
-    public Patient insertDocuments(Long patientId, List<DocumentInput> documents) {
-        return patientService.uploadDocuments(patientId, documents);
+    public List<Document> insertDocuments(Long patientId, List<DocumentInput> documents) {
+        return documentService.insertDocuments((Medic) userService.getCurrentUser().getPerson(), patientId, documents);
     }
 }

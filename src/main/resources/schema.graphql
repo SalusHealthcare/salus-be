@@ -4,11 +4,13 @@ type Query {
     person(personId: ID!): Person
     currentUser: User
 
+    currentPatient: Patient
+    currentStaff: Staff
+    currentMedic: Medic
+
     medics(page: Int!, size: Int!, sort: PersonSort, speciality: MedicalSpeciality): [Medic]
     patients(page: Int!, size: Int!, sort: PersonSort, firstName: String, lastName: String, taxCode: String): [Patient]
-    reservationSlots(page: Int!, size: Int!, medicId: ID, speciality: MedicalSpeciality): [ReservationSlot]
-
-    # methods to filter documents, reservations, reservationSlots, shiftSlots
+    availableReservationSlots(startDate: String!, endDate: String!, medicId: ID, speciality: MedicalSpeciality): [ReservationSlot]
 }
 
 type Mutation {
@@ -19,14 +21,12 @@ type Mutation {
     updatePerson(input: UpdatePersonInput!): Person
     login(email: String!, password: String!): User
     deleteUser(personId: ID!): Boolean
-    promotePerson(personId: ID!): Person
-    unpromotePerson(personId: ID!): Person
-    addShifts(personId: ID!, shifts: [TimeSlotInput]): Worker
-    addReservationSlot(reservationSlots: [TimeSlotInput]): Medic
-    reserve(reservation: ReservationInput): Patient
-    insertDocuments(patientId: ID!, documents: [DocumentInput]!): Patient
-
-    #
+    promoteStaff(personId: ID!): Staff
+    unpromoteStaff(personId: ID!): Staff
+    addShifts(personId: ID!, shifts: [TimeSlotInput!]): Worker
+    addReservationSlot(reservationSlots: [TimeSlotInput!]): Medic
+    reserve(reservation: ReservationInput!): Reservation
+    insertDocuments(patientId: ID!, documents: [DocumentInput!]): [Document]
 }
 
 # INTERFACES
@@ -67,7 +67,8 @@ type Patient implements Person{
     birthDate: Date
     telephoneNumber: String
     roles: [String]
-    medicalRecord: [Document]
+    medicalRecord(page: Int!, size: Int!, startDate: String!, endDate: String!, category: MedicalSpeciality, documentType: DocumentType): [Document]
+    reservations(startDate: String!, endDate: String!): [Reservation]
 }
 
 type Staff implements Person {
@@ -81,7 +82,7 @@ type Staff implements Person {
     birthDate: Date
     telephoneNumber: String
     roles: [String]
-    shiftSlots: [ShiftSlot]
+    shiftSlots(startDate: String!, endDate: String!): [ShiftSlot]
 }
 
 type Medic implements Person {
@@ -95,9 +96,9 @@ type Medic implements Person {
     birthDate: Date
     telephoneNumber: String
     roles: [String]
-    shiftSlots: [ShiftSlot]
+    shiftSlots(startDate: String!, endDate: String!): [ShiftSlot]
     speciality: MedicalSpeciality
-    reservationSlots: [ReservationSlot]
+    reservationSlots(startDate: String!, endDate: String!, booked: Boolean): [ReservationSlot]
 }
 
 type ShiftSlot implements TimeSlot {

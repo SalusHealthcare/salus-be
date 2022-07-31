@@ -33,9 +33,7 @@ public class ReservationSlot extends TimeSlot {
 
     private MedicalSpeciality speciality;
 
-    // TODO capire se necessario cambiare questo metodo in futuro
-    private ReservationSlot book () {
+    public void book () {
         this.booked = true;
-        return this;
     }
 }
