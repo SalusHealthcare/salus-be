@@ -1,20 +1,26 @@
 package be.salushealthcare.salus;
 
+import be.salushealthcare.salus.document.Document;
+import be.salushealthcare.salus.document.DocumentInput;
+import be.salushealthcare.salus.document.DocumentService;
 import be.salushealthcare.salus.person.CreatePersonInput;
 import be.salushealthcare.salus.person.Person;
 import be.salushealthcare.salus.person.PersonService;
 import be.salushealthcare.salus.person.UpdatePersonInput;
 import be.salushealthcare.salus.person.patient.Patient;
 import be.salushealthcare.salus.person.patient.PatientService;
+import be.salushealthcare.salus.person.staff.CreateMedicInput;
 import be.salushealthcare.salus.person.staff.Medic;
 import be.salushealthcare.salus.person.staff.MedicService;
 import be.salushealthcare.salus.person.staff.Staff;
 import be.salushealthcare.salus.person.staff.StaffService;
+import be.salushealthcare.salus.reservation.Reservation;
+import be.salushealthcare.salus.reservation.ReservationInput;
+import be.salushealthcare.salus.reservation.ReservationService;
 import be.salushealthcare.salus.security.BadCredentialsException;
-import be.salushealthcare.salus.team.Team;
-import be.salushealthcare.salus.team.TeamMemberService;
-import be.salushealthcare.salus.team.TeamService;
-import be.salushealthcare.salus.timeslot.shiftslot.ShiftSlotInput;
+import be.salushealthcare.salus.timeslot.TimeSlotInput;
+import be.salushealthcare.salus.timeslot.reservationslot.ReservationSlotService;
+import be.salushealthcare.salus.timeslot.shiftslot.ShiftSlotService;
 import be.salushealthcare.salus.user.CreateUserInput;
 import be.salushealthcare.salus.user.UpdatePasswordInput;
 import be.salushealthcare.salus.user.User;
@@ -38,8 +44,10 @@ public class MutationResolver implements GraphQLMutationResolver {
     private final PatientService patientService;
     private final StaffService staffService;
     private final MedicService medicService;
-    private final TeamService teamService;
-    private final TeamMemberService teamMemberService;
+    private final ShiftSlotService shiftSlotService;
+    private final DocumentService documentService;
+    private final ReservationSlotService reservationSlotService;
+    private final ReservationService reservationService;
     private final AuthenticationProvider authenticationProvider;
 
     public User createPatientUser(CreateUserInput userInfo, CreatePersonInput personInput) {
@@ -54,7 +62,7 @@ public class MutationResolver implements GraphQLMutationResolver {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public User createMedicUser(CreateUserInput userInfo, CreatePersonInput personInput) {
+    public User createMedicUser(CreateUserInput userInfo, CreateMedicInput personInput) {
         Medic person = medicService.create(personInput);
         return userService.createUser(person, userInfo);
     }
@@ -69,11 +77,6 @@ public class MutationResolver implements GraphQLMutationResolver {
         return personService.update(userService.getCurrentUser().getPersonId(), input);
     }
 
-    @PreAuthorize("isAuthenticated()")
-    public Team createTeam(String name) {
-        return teamService.create(name, userService.getCurrentUser());
-    }
-
     @PreAuthorize("isAnonymous()")
     public User login(String email, String password) {
         UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(email, password);
@@ -85,52 +88,38 @@ public class MutationResolver implements GraphQLMutationResolver {
         }
     }
 
-    @PreAuthorize("isAuthenticated()")
-    public Team joinTeam(long teamId) {
-        teamMemberService.join(teamId, userService.getCurrentUser(), userService.isAdmin());
-        return teamService.getById(teamId);
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    public Team leaveTeam(long teamId) {
-        teamMemberService.leave(teamId, userService.getCurrentUser());
-        return teamService.getById(teamId);
-    }
-
     @PreAuthorize("hasAuthority('ADMIN')")
     public boolean deleteUser(long personId) {
         return userService.deleteUser(personId);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public boolean deleteTeam(long teamId) {
-        return teamService.deleteTeam(teamId);
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    public Team approveTeamMember(long teamId, long personId) {
-        teamMemberService.approve(teamId, personId, userService.getCurrentUser());
-        return teamService.getById(teamId);
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    public Team replaceTeamLeader(long teamId, long personId) {
-        teamMemberService.replaceTeamLeader(teamId, personId, userService.getCurrentUser());
-        return teamService.getById(teamId);
+    public Staff promoteStaff(long personId) {
+        return userService.promoteStaff(personId);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Person promotePerson(long personId) {
-        return userService.promotePerson(personId);
+    public Staff unpromoteStaff(long personId) {
+        return userService.unpromoteStaff(personId);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Person unpromotePerson(long personId) {
-        return userService.unpromotePerson(personId);
+    public Staff addShifts(long staffId, List<TimeSlotInput> shifts) {
+        return shiftSlotService.addShifts((Staff) userService.getCurrentUser().getPerson(), shifts);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public Staff addShifts(long personId, List<ShiftSlotInput> shifts) {
-        return staffService.addShifts(personId, shifts);
+    @PreAuthorize("hasAuthority('MEDIC')")
+    public Medic addReservationSlot(List<TimeSlotInput> reservationSlots) {
+        return reservationSlotService.addReservationSlots((Medic) userService.getCurrentUser().getPerson(), reservationSlots);
+    }
+
+    @PreAuthorize("hasAuthority('PATIENT')")
+    public Reservation reserve(ReservationInput reservation) {
+        return reservationService.reserve((Patient) userService.getCurrentUser().getPerson(), reservation);
+    }
+
+    @PreAuthorize("hasAuthority('MEDIC')")
+    public List<Document> insertDocuments(Long patientId, List<DocumentInput> documents) {
+        return documentService.insertDocuments((Medic) userService.getCurrentUser().getPerson(), patientId, documents);
     }
 }

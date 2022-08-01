@@ -40,7 +40,6 @@ public abstract class Person {
     @Setter
     private String telephoneNumber;
 
-    // TODO propagate taxCode change to all the project
     @Setter
     private String taxCode;
 

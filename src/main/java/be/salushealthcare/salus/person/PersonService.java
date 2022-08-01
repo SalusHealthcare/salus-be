@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -13,24 +14,16 @@ import java.util.List;
 public class PersonService {
     private final PersonRepository repository;
 
-    public List<Person> getAll(int page, int size, PersonSort sort) {
+    public List<Person> getAll(int page, int size, PersonSort sort, String role) {
         PageRequest pageRequest = PageRequest.of(page, size, sort == null ? Sort.unsorted() : sort.getSort());
-        return repository.findAll(pageRequest).getContent();
+        List<Person> response;
+        if (StringUtils.isEmpty(role)) {
+            response = repository.findAll(pageRequest).getContent();
+        } else {
+            response = repository.findAllByUserRoles(pageRequest, role);
+        }
+        return response;
     }
-
-    /*@Transactional
-    public Person create(CreatePersonInput input) {
-        return repository.saveAndFlush(Person
-                        .builder()
-                        .firstName(input.getFirstName())
-                        .lastName(input.getLastName())
-                        .birthDate(input.getBirthDate())
-                        .telephoneNumber(input.getTelephoneNumber())
-                        .residence(input.getResidence())
-                        .domicile(input.getDomicile())
-                        .teams(List.of())
-                        .build());
-    }*/
 
     @Transactional
     public Person update(Long personId, UpdatePersonInput input) {
@@ -49,6 +42,6 @@ public class PersonService {
     }
 
     public Person getById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
+        return repository.findById(id).orElseThrow(() -> new PersonNotFoundException("Person", id));
     }
 }

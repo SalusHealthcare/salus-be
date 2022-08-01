@@ -1,6 +1,7 @@
 package be.salushealthcare.salus.document;
 
 import be.salushealthcare.salus.MedicalSpeciality;
+import be.salushealthcare.salus.person.patient.Patient;
 import be.salushealthcare.salus.person.staff.Medic;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -27,11 +29,16 @@ public class Document {
 
     private String description;
 
+    private LocalDateTime insertedAt;
+
     private MedicalSpeciality category;
 
     private DocumentType documentType;
 
-    @ManyToOne
+    @OneToOne
+    private Patient patient;
+
+    @OneToOne
     private Medic editor;
 
     /* TODO capire se si può aggiungere un campo del genere
