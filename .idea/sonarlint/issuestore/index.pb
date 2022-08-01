@@ -9,10 +9,6 @@ o
 ?src/main/java/be/salushealthcare/salus/user/UserRepository.java,a/4/a437d9cc7a5ba344ab102e4fde727ba72baec32d
 S
 #.idea/sonarlint/issuestore/index.pb,9/f/9fe84ebb15faf917b7def6236dba604453cc61e0
-t
-Dsrc/main/java/be/salushealthcare/salus/person/CreatePersonInput.java,8/e/8e0667059ef455e0adcc3143a17d24a654d8fc39
-y
-Isrc/main/java/be/salushealthcare/salus/person/staff/CreateMedicInput.java,f/9/f905ad80133bcfcb52efdc46344c8e46e1a488d5
 m
 =src/main/java/be/salushealthcare/salus/MedicalSpeciality.java,3/2/32af527fd0f2b67cb96d80cdba26f298f0e58fa1
 t
@@ -75,12 +71,6 @@ l
 <src/main/java/be/salushealthcare/salus/MutationResolver.java,1/5/15cd77a7be7356f09d88470bceea059bc5b35cc8
 p
 @src/main/java/be/salushealthcare/salus/person/PersonService.java,8/7/872f1ac1cc0a1892c58edd1afa9e58fcb1dd1530
-u
-Esrc/main/java/be/salushealthcare/salus/person/staff/StaffService.java,6/f/6fa17d322d508084d7428c29c3571073664f8292
-u
-Esrc/main/java/be/salushealthcare/salus/person/staff/MedicService.java,4/e/4e83b8572b68f82308ec3795189963195d0f93c6
-y
-Isrc/main/java/be/salushealthcare/salus/person/patient/PatientService.java,b/c/bc0c24008c40378f9e7c3434df8aad1800703c2e
 t
 Dsrc/main/java/be/salushealthcare/salus/document/DocumentService.java,d/4/d414848c1fb45a77bee666aa313583c232145a3a
 4
