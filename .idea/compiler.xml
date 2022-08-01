@@ -14,7 +14,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="salus-backend" options="-parameters --add-modules java.base" />
+      <module name="salus-backend" options="-parameters" />
       <module name="salusbe" options="-parameters --add-modules java.base" />
     </option>
   </component>
