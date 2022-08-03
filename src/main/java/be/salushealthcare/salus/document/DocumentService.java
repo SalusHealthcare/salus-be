@@ -25,16 +25,16 @@ public class DocumentService {
         LocalDateTime endDateTime = LocalDateTime.parse(endString);
         List<Document> response = null;
 
-        if (category == null && documentType == null) response = repository.findDocumentsByPatient_IdAndAndInsertedAtBetween(pageRequest, patientId, startDateTime, endDateTime);
-        if (category != null && documentType == null) response = repository.findDocumentsByPatient_IdAndAndInsertedAtBetweenAndCategory(pageRequest, patientId, startDateTime, endDateTime, category);
-        if (category == null && documentType != null) response = repository.findDocumentsByPatient_IdAndAndInsertedAtBetweenAndDocumentType(pageRequest, patientId, startDateTime, endDateTime, documentType);
-        if (category != null && documentType != null) response = repository.findDocumentsByPatient_IdAndAndInsertedAtBetweenAndCategoryAndDocumentType(pageRequest, patientId, startDateTime, endDateTime, category, documentType);
+        if (category == null && documentType == null) response = repository.findDocumentsByPatient_IdAndInsertedAtBetween(pageRequest, patientId, startDateTime, endDateTime);
+        if (category != null && documentType == null) response = repository.findDocumentsByPatient_IdAndInsertedAtBetweenAndCategory(pageRequest, patientId, startDateTime, endDateTime, category);
+        if (category == null && documentType != null) response = repository.findDocumentsByPatient_IdAndInsertedAtBetweenAndDocumentType(pageRequest, patientId, startDateTime, endDateTime, documentType);
+        if (category != null && documentType != null) response = repository.findDocumentsByPatient_IdAndInsertedAtBetweenAndCategoryAndDocumentType(pageRequest, patientId, startDateTime, endDateTime, category, documentType);
 
         return response;
     }
 
     public List<Document> insertDocuments(Medic editor, Long patientId, List<DocumentInput> inputs) {
-        Patient patient = patientService.getPatient(patientId);
+        Patient patient = patientService.getPatientById(patientId);
         List<Document> documents = inputs.stream()
                 .map(d -> Document.builder()
                         .description(d.getDescription())

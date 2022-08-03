@@ -28,12 +28,12 @@ public class PersonService {
     @Transactional
     public Person update(Long personId, UpdatePersonInput input) {
         Person person = getById(personId);
-        person.setFirstName(input.getFirstName());
-        person.setLastName(input.getLastName());
-        person.setBirthDate(input.getBirthDate());
-        person.setTelephoneNumber(input.getTelephoneNumber());
-        person.setResidence(input.getResidence());
-        person.setDomicile(input.getDomicile());
+        if (input.getFirstName() != null) person.setFirstName(input.getFirstName());
+        if (input.getLastName() != null) person.setLastName(input.getLastName());
+        if (input.getBirthDate() != null) person.setBirthDate(input.getBirthDate());
+        if (input.getTelephoneNumber() != null) person.setTelephoneNumber(input.getTelephoneNumber());
+        if (input.getResidence() != null) person.setResidence(input.getResidence());
+        if (input.getDomicile() != null) person.setDomicile(input.getDomicile());
         return person;
     }
 

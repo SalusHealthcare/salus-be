@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ReservationSlotService {
-    ReservationSlotRepository repository;
+    private final ReservationSlotRepository repository;
 
-    public ReservationSlot getReservationSlot(Long id) {
+    public ReservationSlot getReservationSlotById(Long id) {
         return repository.getOne(id);
     }
 

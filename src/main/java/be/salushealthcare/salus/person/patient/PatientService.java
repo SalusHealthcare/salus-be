@@ -16,7 +16,7 @@ import java.util.List;
 public class PatientService {
     private final PatientRepository repository;
 
-    public Patient getPatient(Long id) {
+    public Patient getPatientById(Long id) {
         return repository.findById(id).orElseThrow(() -> new PersonNotFoundException("Patient", id));
     }
 
