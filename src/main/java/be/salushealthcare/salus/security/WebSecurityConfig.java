@@ -52,7 +52,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         config.setAllowedOrigins(List.of("*"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowedMethods(List.of("*"));
-        source.registerCorsConfiguration("/**", config);
+        config.setAllowCredentials(true);
+        source.registerCorsConfiguration("/graphql/**", config);
         return new CorsFilter(source);
     }
 }
