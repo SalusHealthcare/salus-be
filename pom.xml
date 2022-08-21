@@ -18,8 +18,6 @@
 		<java.version>11</java.version>
 		<graphql.version>11.0.0</graphql.version>
 		<testcontainers.version>1.17.2</testcontainers.version>
-		 <thymeleaf.version>3.0.3.RELEASE</thymeleaf.version>
-    <thymeleaf-layout-dialect.version>2.2.1</thymeleaf-layout-dialect.version>
 	</properties>
 
 	<dependencies>
@@ -55,11 +53,11 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 			<scope>test</scope>
-		</dependency>
+		</dependency> -->
 
 		<dependency>
 			<groupId>com.graphql-java-kickstart</groupId>
