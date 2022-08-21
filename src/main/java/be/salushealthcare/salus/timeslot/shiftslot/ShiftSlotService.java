@@ -1,7 +1,6 @@
 package be.salushealthcare.salus.timeslot.shiftslot;
 
 import be.salushealthcare.salus.person.staff.Staff;
-import be.salushealthcare.salus.person.staff.StaffRepository;
 import be.salushealthcare.salus.timeslot.TimeSlotInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,8 +13,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ShiftSlotService {
-    ShiftSlotRepository repository;
-    StaffRepository staffRepository;
+    private final ShiftSlotRepository repository;
 
     public List<ShiftSlot> getShiftSlotsByStaffIdAndStartDateTimeIsBetween(Long staffId, String startString, String endString) {
         LocalDateTime startDateTime = LocalDateTime.parse(startString);

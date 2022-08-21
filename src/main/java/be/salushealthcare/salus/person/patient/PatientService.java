@@ -16,7 +16,7 @@ import java.util.List;
 public class PatientService {
     private final PatientRepository repository;
 
-    public Patient getPatient(Long id) {
+    public Patient getPatientById(Long id) {
         return repository.findById(id).orElseThrow(() -> new PersonNotFoundException("Patient", id));
     }
 
@@ -40,6 +40,7 @@ public class PatientService {
                 .builder()
                 .firstName(input.getFirstName())
                 .lastName(input.getLastName())
+                .taxCode(input.getTaxCode())
                 .birthDate(input.getBirthDate())
                 .telephoneNumber(input.getTelephoneNumber())
                 .residence(input.getResidence())

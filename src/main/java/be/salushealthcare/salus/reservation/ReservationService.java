@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+// TODO fare i test per i casi negativi
+
 @Service
 @RequiredArgsConstructor
 public class ReservationService {
@@ -24,16 +26,19 @@ public class ReservationService {
 
     @Transactional
     public Reservation reserve(Patient patient, ReservationInput reservationInput) {
-        ReservationSlot reservationSlot = reservationSlotService.getReservationSlot(reservationInput.getReservationSlotId());
-        reservationSlot.book();
-        Reservation reservation = be.salushealthcare.salus.reservation.Reservation.builder()
-                .description(reservationInput.getDescription())
-                .bookedAt(LocalDateTime.now())
-                .priority(reservationInput.getPriority())
-                .patient(patient)
-                .reservationSlot(reservationSlot)
-                .build();
-        repository.saveAndFlush(reservation);
-        return reservation;
+        ReservationSlot reservationSlot = reservationSlotService.getReservationSlotById(reservationInput.getReservationSlotId());
+        if (reservationSlot.isBooked())
+            throw new RuntimeException("The slot has already been booked");
+        else {
+            reservationSlot.book();
+            Reservation reservation = Reservation.builder()
+                    .description(reservationInput.getDescription())
+                    .bookedAt(LocalDateTime.now())
+                    .priority(reservationInput.getPriority())
+                    .patient(patient)
+                    .reservationSlot(reservationSlot)
+                    .build();
+            return repository.saveAndFlush(reservation);
+        }
     }
 }

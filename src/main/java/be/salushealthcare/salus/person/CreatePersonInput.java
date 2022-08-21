@@ -11,6 +11,7 @@ import java.time.LocalDate;
 public class CreatePersonInput {
     private final String firstName;
     private final String lastName;
+    private final String taxCode;
     private final LocalDate birthDate;
     private final String telephoneNumber;
     private final Address residence;

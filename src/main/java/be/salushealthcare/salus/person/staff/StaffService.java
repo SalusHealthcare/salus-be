@@ -21,6 +21,7 @@ public class StaffService {
                 .builder()
                 .firstName(input.getFirstName())
                 .lastName(input.getLastName())
+                .taxCode(input.getTaxCode())
                 .birthDate(input.getBirthDate())
                 .telephoneNumber(input.getTelephoneNumber())
                 .residence(input.getResidence())

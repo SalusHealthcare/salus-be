@@ -1,7 +1,6 @@
 package be.salushealthcare.salus.user;
 
 import be.salushealthcare.salus.person.Person;
-import be.salushealthcare.salus.person.PersonService;
 import be.salushealthcare.salus.person.patient.Patient;
 import be.salushealthcare.salus.person.staff.Medic;
 import be.salushealthcare.salus.person.staff.Staff;
@@ -29,8 +28,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -46,7 +48,6 @@ import static java.util.function.Predicate.not;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
     private final UserRepository repository;
-    private final PersonService personService;
     private final StaffService staffService;
     private final SecurityProperties properties;
     private final Algorithm algorithm;
@@ -85,9 +86,10 @@ public class UserService implements UserDetailsService {
     public User createUser(Person person, CreateUserInput input) {
         Set<String> authorities;
         if (person instanceof Patient) {
-            authorities = Set.of(USER_AUTHORITY);
+            authorities = new HashSet<>(List.of(USER_AUTHORITY));
         } else {
-            authorities = person instanceof Medic ? Set.of(STAFF_AUTHORITY, MEDIC_AUTHORITY) : Set.of(STAFF_AUTHORITY);
+            authorities = person instanceof Medic ? new HashSet<>(List.of(STAFF_AUTHORITY, MEDIC_AUTHORITY))
+                    : new HashSet<>(List.of(STAFF_AUTHORITY));
         }
         if (!exists(input)) {
             return repository.saveAndFlush(User
