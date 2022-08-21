@@ -18,6 +18,8 @@
 		<java.version>11</java.version>
 		<graphql.version>11.0.0</graphql.version>
 		<testcontainers.version>1.17.2</testcontainers.version>
+		 <thymeleaf.version>3.0.3.RELEASE</thymeleaf.version>
+    <thymeleaf-layout-dialect.version>2.2.1</thymeleaf-layout-dialect.version>
 	</properties>
 
 	<dependencies>
