@@ -105,7 +105,7 @@ public class MutationResolver implements GraphQLMutationResolver {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public Staff addShifts(long staffId, List<TimeSlotInput> shifts) {
-        return shiftSlotService.addShifts((Staff) userService.getCurrentUser().getPerson(), shifts);
+        return shiftSlotService.addShifts((Staff) personService.getById(staffId), shifts);
     }
 
     @PreAuthorize("hasAuthority('MEDIC')")
