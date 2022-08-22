@@ -25,7 +25,11 @@ type Mutation {
     promoteStaff(personId: ID!): Staff
     unpromoteStaff(personId: ID!): Staff
     addShifts(personId: ID!, shifts: [TimeSlotInput!]): Worker
-    addReservationSlot(reservationSlots: [TimeSlotInput!]): Medic
+    updateShift(shiftId: ID!, input: TimeSlotInput!): ShiftSlot
+    deleteShift(shiftId: ID!): Boolean
+    addReservationSlots(reservationSlots: [TimeSlotInput!]): Medic
+    updateShift(reservationSlotId: ID!, input: TimeSlotInput!): ShiftSlot
+    deleteShift(reservationSlotId: ID!): Boolean
     reserve(reservation: ReservationInput!): Reservation
     insertDocuments(patientId: ID!, documents: [DocumentInput!]): [Document]
 }

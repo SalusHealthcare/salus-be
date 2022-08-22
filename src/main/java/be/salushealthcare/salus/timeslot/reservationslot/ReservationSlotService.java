@@ -2,8 +2,10 @@ package be.salushealthcare.salus.timeslot.reservationslot;
 
 
 import be.salushealthcare.salus.MedicalSpeciality;
+import be.salushealthcare.salus.person.PersonNotFoundException;
 import be.salushealthcare.salus.person.staff.Medic;
 import be.salushealthcare.salus.timeslot.TimeSlotInput;
+import be.salushealthcare.salus.timeslot.shiftslot.ShiftSlot;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,5 +56,27 @@ public class ReservationSlotService {
                 .collect(Collectors.toList());
         repository.saveAll(reservationSlots);
         return medic;
+    }
+
+    @Transactional
+    public ReservationSlot updateShift(long reservationSlotId, TimeSlotInput input) {
+        ReservationSlot reservationSlot = getById(reservationSlotId);
+        if (reservationSlot.isBooked()) throw new AlreadyBookedException(reservationSlotId);
+        reservationSlot.setStartDateTime(input.getStartDateTime());
+        reservationSlot.setDurationInHours(input.getDurationInHours());
+        repository.save(reservationSlot);
+        return reservationSlot;
+    }
+
+    @Transactional
+    public boolean deleteReservationSlot(long reservationSlotId) {
+        ReservationSlot reservationSlot = getById(reservationSlotId);
+        if (reservationSlot.isBooked()) throw new AlreadyBookedException(reservationSlotId);
+        repository.delete(reservationSlot);
+        return true;
+    }
+
+    public ReservationSlot getById(Long id) {
+        return repository.findById(id).orElseThrow(() -> new PersonNotFoundException("ReservationSlot", id));
     }
 }

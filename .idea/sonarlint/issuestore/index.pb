@@ -39,8 +39,6 @@ Rsrc/main/java/be/salushealthcare/salus/timeslot/shiftslot/ShiftSlotRepository.j
 Msrc/main/java/be/salushealthcare/salus/reservation/ReservationRepository.java,8/d/8d97fb8bc68d087e655596dfe168ce2bba52a5b3
 s
 Csrc/main/java/be/salushealthcare/salus/reservation/Reservation.java,a/9/a93d019eadca8170ad424fc61a8189caf6f67dd8
-z
-Jsrc/main/java/be/salushealthcare/salus/person/PersonNotFoundException.java,7/0/70b0295709c91b564023858caf24ffb6934949c5
 r
 Bsrc/main/java/be/salushealthcare/salus/person/patient/Patient.java,b/7/b7552ef0995fe3a8688375fd01f7bce2cbde0151
 z

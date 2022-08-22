@@ -1,5 +1,7 @@
 package be.salushealthcare.salus.timeslot.shiftslot;
 
+import be.salushealthcare.salus.person.Person;
+import be.salushealthcare.salus.person.PersonNotFoundException;
 import be.salushealthcare.salus.person.staff.Staff;
 import be.salushealthcare.salus.timeslot.TimeSlotInput;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +34,26 @@ public class ShiftSlotService {
                 .collect(Collectors.toList());
         repository.saveAll(shiftSlots);
         return staff;
+    }
+
+    @Transactional
+    public ShiftSlot updateShift(long shiftId, TimeSlotInput input) {
+        ShiftSlot shiftSlot = getById(shiftId);
+        shiftSlot.setStartDateTime(input.getStartDateTime());
+        shiftSlot.setDurationInHours(input.getDurationInHours());
+        repository.save(shiftSlot);
+        return shiftSlot;
+    }
+
+    @Transactional
+    public boolean deleteShift(long shiftId) {
+        // if it doesn't find the shiftSlot the software would throw an exception and not return true
+        ShiftSlot shiftSlot = getById(shiftId);
+        repository.delete(shiftSlot);
+        return true;
+    }
+
+    public ShiftSlot getById(Long id) {
+        return repository.findById(id).orElseThrow(() -> new PersonNotFoundException("ShiftSlot", id));
     }
 }
