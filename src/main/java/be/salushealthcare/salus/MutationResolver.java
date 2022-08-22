@@ -77,6 +77,11 @@ public class MutationResolver implements GraphQLMutationResolver {
         return personService.update(userService.getCurrentUser().getPersonId(), input);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Person updatePersonByAdmin(Long personId, UpdatePersonInput input) {
+        return personService.update(personId, input);
+    }
+
     @PreAuthorize("isAnonymous()")
     public User login(String email, String password) {
         UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(email, password);

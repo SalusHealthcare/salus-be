@@ -19,6 +19,7 @@ type Mutation {
     createMedicUser(userInfo: CreateUserInput!, personInfo: CreateMedicInput!): User
     updatePassword(input: UpdatePasswordInput!): User
     updatePerson(input: UpdatePersonInput!): Person
+    updatePersonByAdmin(personId: ID!, input: UpdatePersonInput!): Person
     login(email: String!, password: String!): User
     deleteUser(personId: ID!): Boolean
     promoteStaff(personId: ID!): Staff
