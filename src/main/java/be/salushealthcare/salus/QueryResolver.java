@@ -57,7 +57,7 @@ public class QueryResolver implements GraphQLQueryResolver {
         return reservationSlotService.getReservationSlots(startDate, endDate, medicId, speciality, false);
     }
 
-    @PreAuthorize("hasAuthority('STAFF')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','STAFF')")
     public List<Patient> getPatients(int page, int size, PersonSort sort, String firstName, String lastName, String taxCode) {
         return patientService.getAll(page, size, sort, firstName, lastName, taxCode);
     }
