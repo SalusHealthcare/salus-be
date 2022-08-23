@@ -18,5 +18,5 @@ import java.util.List;
 @NoArgsConstructor
 public class Staff extends Person {
     @Setter
-    private boolean deletable = true;
+    private boolean deletable;
 }

@@ -26,6 +26,7 @@ public class StaffService {
                 .telephoneNumber(input.getTelephoneNumber())
                 .residence(input.getResidence())
                 .domicile(input.getDomicile())
+                .deletable(true)
                 .build());
     }
 }

@@ -33,6 +33,7 @@ public class MedicService {
                 .residence(input.getResidence())
                 .domicile(input.getDomicile())
                 .speciality(input.getMedicalSpeciality())
+                .deletable(true)
                 .build());
     }
 
