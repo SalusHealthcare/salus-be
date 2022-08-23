@@ -46,6 +46,7 @@ public class ReservationSlotService {
 
     @Transactional
     public Medic addReservationSlots(Medic medic, List<TimeSlotInput> reservations) {
+        medic.setDeletable(false);
         List<ReservationSlot> reservationSlots = reservations.stream()
                 .map(s -> ReservationSlot.builder()
                         .startDateTime(s.getStartDateTime())

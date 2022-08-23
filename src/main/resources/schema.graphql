@@ -86,6 +86,7 @@ type Staff implements Person {
     domicile: Address
     birthDate: Date
     telephoneNumber: String
+    deletable: Boolean
     roles: [String]
     shiftSlots(startDate: String!, endDate: String!): [ShiftSlot]
 }
@@ -100,6 +101,7 @@ type Medic implements Person {
     domicile: Address
     birthDate: Date
     telephoneNumber: String
+    deletable: Boolean
     roles: [String]
     shiftSlots(startDate: String!, endDate: String!): [ShiftSlot]
     speciality: MedicalSpeciality

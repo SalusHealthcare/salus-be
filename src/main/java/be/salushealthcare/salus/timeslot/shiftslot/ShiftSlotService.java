@@ -25,6 +25,7 @@ public class ShiftSlotService {
 
     @Transactional
     public Staff addShifts(Staff staff, List<TimeSlotInput> shifts) {
+        staff.setDeletable(false);
         List<ShiftSlot> shiftSlots = shifts.stream()
                 .map(s -> ShiftSlot.builder()
                         .staff(staff)
