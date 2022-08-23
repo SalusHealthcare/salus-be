@@ -16,6 +16,4 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 public class Staff extends Person {
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<ShiftSlot> allShiftSlots;
 }
