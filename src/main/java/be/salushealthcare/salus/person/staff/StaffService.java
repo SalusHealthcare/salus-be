@@ -25,6 +25,7 @@ public class StaffService {
                 .birthDate(input.getBirthDate())
                 .telephoneNumber(input.getTelephoneNumber())
                 .residence(input.getResidence())
+                .domicile(input.getDomicile())
                 .build());
     }
 }

@@ -47,3 +47,13 @@ q
 Asrc/main/java/be/salushealthcare/salus/person/PersonResolver.java,2/8/28f65172ef0e9fc81c4a3bb92e66a86e373ddf09
 a
 1src/main/java/be/salushealthcare/salus/Roles.java,5/1/51fc1ec9d61c6950c8e84d12c69dc81bb5141d1c
+4
+mvnw,5/d/5d837c4ed85ecaaf932c506e80ff5d7b9f3d590d
+e
+5src/main/java/be/salushealthcare/salus/user/User.java,f/0/f06a05128ff381524e67a5e3afec2e70e15c294b
+r
+Bsrc/main/java/be/salushealthcare/salus/timeslot/TimeSlotInput.java,9/8/985e2cc468f795c7aa309e1e5c1a73feda520f99
+p
+@src/main/java/be/salushealthcare/salus/person/PersonService.java,8/7/872f1ac1cc0a1892c58edd1afa9e58fcb1dd1530
+l
+<src/main/java/be/salushealthcare/salus/user/UserService.java,7/d/7d0d17bb115a21ee9f7eb99634e4d7c106c0feb8
