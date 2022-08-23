@@ -30,7 +30,6 @@ public class PersonService {
         Person person = getById(personId);
         if (input.getFirstName() != null) person.setFirstName(input.getFirstName());
         if (input.getLastName() != null) person.setLastName(input.getLastName());
-        if (input.getBirthDate() != null) person.setBirthDate(input.getBirthDate());
         if (input.getTelephoneNumber() != null) person.setTelephoneNumber(input.getTelephoneNumber());
         if (input.getResidence() != null) person.setResidence(input.getResidence());
         if (input.getDomicile() != null) person.setDomicile(input.getDomicile());

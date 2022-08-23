@@ -53,7 +53,5 @@ e
 5src/main/java/be/salushealthcare/salus/user/User.java,f/0/f06a05128ff381524e67a5e3afec2e70e15c294b
 r
 Bsrc/main/java/be/salushealthcare/salus/timeslot/TimeSlotInput.java,9/8/985e2cc468f795c7aa309e1e5c1a73feda520f99
-p
-@src/main/java/be/salushealthcare/salus/person/PersonService.java,8/7/872f1ac1cc0a1892c58edd1afa9e58fcb1dd1530
 l
 <src/main/java/be/salushealthcare/salus/user/UserService.java,7/d/7d0d17bb115a21ee9f7eb99634e4d7c106c0feb8

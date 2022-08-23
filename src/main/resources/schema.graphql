@@ -250,9 +250,7 @@ input PersonSort {
 input UpdatePersonInput {
     firstName: String
     lastName: String
-    birthDate: String
     telephoneNumber: String
-    title: String
     residence: AddressInput
     domicile: AddressInput
 }
