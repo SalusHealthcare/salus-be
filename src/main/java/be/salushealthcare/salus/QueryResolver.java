@@ -42,7 +42,7 @@ public class QueryResolver implements GraphQLQueryResolver {
         return personService.countAll();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MEDIC', 'STAFF')")
     public Person getPerson(long personId) {
         return personService.getById(personId);
     }
@@ -57,7 +57,7 @@ public class QueryResolver implements GraphQLQueryResolver {
         return reservationSlotService.getReservationSlots(startDate, endDate, medicId, speciality, false);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','STAFF')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MEDIC', 'STAFF')")
     public List<Patient> getPatients(int page, int size, PersonSort sort, String firstName, String lastName, String taxCode) {
         return patientService.getAll(page, size, sort, firstName, lastName, taxCode);
     }
