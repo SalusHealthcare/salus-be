@@ -9,6 +9,7 @@ type Query {
     currentMedic: Medic
 
     medics(page: Int!, size: Int!, sort: PersonSort, speciality: MedicalSpeciality): [Medic]
+    patient(patientId: ID!): Patient
     patients(page: Int!, size: Int!, sort: PersonSort, firstName: String, lastName: String, taxCode: String): [Patient]
     availableReservationSlots(startDate: String!, endDate: String!, medicId: ID, speciality: MedicalSpeciality): [ReservationSlot]
 }
