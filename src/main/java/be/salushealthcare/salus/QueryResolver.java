@@ -58,6 +58,11 @@ public class QueryResolver implements GraphQLQueryResolver {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MEDIC', 'STAFF')")
+    public Patient getPatientById(long patientId) {
+         return patientService.getById(patientId);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MEDIC', 'STAFF')")
     public List<Patient> getPatients(int page, int size, PersonSort sort, String firstName, String lastName, String taxCode) {
         return patientService.getAll(page, size, sort, firstName, lastName, taxCode);
     }
