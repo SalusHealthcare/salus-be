@@ -30,8 +30,7 @@ public class PatientResolver implements GraphQLResolver<Patient> {
     }
 
     public List<Document> getMedicalRecord(Patient patient, int page, int size, String startDate, String endDate, MedicalSpeciality category, DocumentType documentType) {
-        return userService.hasAuthority(Roles.MEDIC_AUTHORITY) || userService.getCurrentUser().getPersonId() == patient.getId() ?
-                documentService.getDocuments(patient.getId(), page, size, startDate, endDate, category, documentType) : null;
+        return documentService.getDocuments(patient.getId(), page, size, startDate, endDate, category, documentType);
     }
 
     public List<be.salushealthcare.salus.reservation.Reservation> getReservations(Patient patient, String startDate, String endDate) {
