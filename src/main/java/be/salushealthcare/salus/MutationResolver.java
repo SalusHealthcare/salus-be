@@ -140,7 +140,7 @@ public class MutationResolver implements GraphQLMutationResolver {
         return reservationSlotService.deleteReservationSlot(reservationSlotId);
     }
 
-    @PreAuthorize("hasAuthority('PATIENT')")
+    @PreAuthorize("hasAuthority('USER')")
     public Reservation reserve(ReservationInput reservation) {
         return reservationService.reserve((Patient) userService.getCurrentUser().getPerson(), reservation);
     }
