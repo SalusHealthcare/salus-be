@@ -30,7 +30,6 @@ public class ReservationService {
         if (reservationSlot.isBooked())
             throw new RuntimeException("The slot has already been booked");
         else {
-            reservationSlot.book();
             Reservation reservation = Reservation.builder()
                     .description(reservationInput.getDescription())
                     .bookedAt(LocalDateTime.now())
@@ -38,6 +37,7 @@ public class ReservationService {
                     .patient(patient)
                     .reservationSlot(reservationSlot)
                     .build();
+            reservationSlot.book(reservation);
             return repository.saveAndFlush(reservation);
         }
     }
